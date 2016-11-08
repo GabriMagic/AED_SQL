@@ -14,8 +14,6 @@ public class MainController {
 		view = new MainView();
 		// conexion = new Conexion();
 
-		
-		
 		view.getLibrosTab().setContent(aedSqlController.getView());
 	}
 
