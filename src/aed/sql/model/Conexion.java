@@ -4,24 +4,47 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class Conexion {
 	private Connection conexion;
 
-	private String ruta;
-	private String host;
+	private String ruta, host, db, user, password, link = "";
 	private int puerto;
-	private String db;
-	private String user;
-	private String password;
 
-	public Conexion() {
+	// private StringProperty ruta, host, db, user, password, link;
+	// private IntegerProperty puerto;
+
+	// public Conexion() {
+	//
+	// ruta = new SimpleStringProperty(this, "ruta", "jdbc:mysql:");
+	// host = new SimpleStringProperty(this, "host", "localhsot");
+	// puerto = new SimpleIntegerProperty(this, "puerto", 3306);
+	// db = new SimpleStringProperty(this, "db", "bdbiblioteca");
+	// user = new SimpleStringProperty(this, "user", "root");
+	// password = new SimpleStringProperty(this, "password", "");
+	// }
+
+	public Conexion(String ruta, String host, int puerto, String db, String user, String password) {
+
+		this.ruta = ruta;
+		this.host = host;
+		this.db = db;
+		this.user = user;
+		this.password = password;
 
 	}
 
 	public boolean conectar() {
 		try {
 
-			String link = ruta + "//" + host + ":" + puerto + "/" + db;
+			// link = new SimpleStringProperty(this, "link ", ruta + "//" + host
+			// + ":" + puerto + "/" + db);
+			System.out.println("THIS "+link);
+			link = ruta + "//" + host + ":" + puerto + "/" + db;
 			conexion = DriverManager.getConnection(link, user, password);
 			return true;
 		} catch (SQLException e) {
@@ -31,10 +54,6 @@ public class Conexion {
 
 	public Connection getConexion() {
 		return conexion;
-	}
-
-	public void setConexion(Connection conexion) {
-		this.conexion = conexion;
 	}
 
 	public String getRuta() {
@@ -51,14 +70,6 @@ public class Conexion {
 
 	public void setHost(String host) {
 		this.host = host;
-	}
-
-	public int getPuerto() {
-		return puerto;
-	}
-
-	public void setPuerto(int puerto) {
-		this.puerto = puerto;
 	}
 
 	public String getDb() {
@@ -83,6 +94,26 @@ public class Conexion {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
+	}
+
+	public int getPuerto() {
+		return puerto;
+	}
+
+	public void setPuerto(int puerto) {
+		this.puerto = puerto;
+	}
+
+	public void setConexion(Connection conexion) {
+		this.conexion = conexion;
 	}
 
 }
