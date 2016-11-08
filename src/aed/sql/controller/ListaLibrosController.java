@@ -15,13 +15,13 @@ public class ListaLibrosController {
 
 	public ListaLibrosController() {
 		view = new ListaLibrosView();
-		
+
 		conexionController = new ConexionController();
 		listaLibros = new ListaLibros();
 
 		view.getLibrosTable().setItems(listaLibros.librosProperty());
 
-//		cargarLibros();
+		cargarLibros();
 
 	}
 

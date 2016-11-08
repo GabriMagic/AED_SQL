@@ -67,6 +67,42 @@ public class MainView extends BorderPane {
 		setCenter(tabPane);
 	}
 
+	public ToolBar getToolBar() {
+		return toolBar;
+	}
+
+	public Button getConectarButton() {
+		return conectarButton;
+	}
+
+	public TextField getHostText() {
+		return hostText;
+	}
+
+	public TextField getPuertoText() {
+		return puertoText;
+	}
+
+	public TextField getDbText() {
+		return dbText;
+	}
+
+	public TextField getUserText() {
+		return userText;
+	}
+
+	public PasswordField getPasswordField() {
+		return passwordField;
+	}
+
+	public ComboBox<String> getRutaBox() {
+		return rutaBox;
+	}
+
+	public ArrayList<String> getOptionList() {
+		return optionList;
+	}
+
 	public Tab getLibrosTab() {
 		return librosTab;
 	}
