@@ -34,9 +34,10 @@ public class MainView extends BorderPane {
 		conectarButton = new Button("Conectar");
 
 		rutaBox = new ComboBox<>();
-		rutaBox.setPromptText("-------------");
 		rutaBox.setItems(FXCollections.observableArrayList(optionList));
-
+		rutaBox.getSelectionModel().select(0);
+		
+		
 		hostText = new TextField("localhost");
 		hostText.setPromptText("Host...");
 

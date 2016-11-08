@@ -5,14 +5,14 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Conexion {
-	Connection conexion;
+	private Connection conexion;
 
-	String ruta;
-	String host;
-	int puerto;
-	String db;
-	String user;
-	String password;
+	private String ruta;
+	private String host;
+	private int puerto;
+	private String db;
+	private String user;
+	private String password;
 
 	public Conexion() {
 		try {

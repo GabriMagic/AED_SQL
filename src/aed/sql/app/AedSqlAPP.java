@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 
 public class AedSqlAPP extends Application {
 
-	MainController mainController;
+	private MainController mainController;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {

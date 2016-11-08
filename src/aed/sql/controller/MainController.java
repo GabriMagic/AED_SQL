@@ -1,28 +1,29 @@
 package aed.sql.controller;
 
+import java.sql.Connection;
+
 import aed.sql.model.Conexion;
 import aed.sql.view.MainView;
 
 public class MainController {
 
-	Conexion conexion;
-	ListaLibrosController aedSqlController;
-	// ConexionController conexionController;
-	MainView view;
+	private Conexion conexion;
+	private ListaLibrosController librosController;
+	private MainView view;
 
 	public MainController() {
 
-		aedSqlController = new ListaLibrosController();
+		librosController = new ListaLibrosController();
 
 		conexion = new Conexion();
 
 		view = new MainView();
 
-		conectar();
+		// conectar();
 
 		view.getConectarButton().setOnAction(e -> conectar());
 
-		view.getLibrosTab().setContent(aedSqlController.getView());
+		view.getLibrosTab().setContent(librosController.getView());
 	}
 
 	private void conectar() {
@@ -33,9 +34,15 @@ public class MainController {
 		conexion.setUser(view.getUserText().getText());
 		conexion.setPassword(view.getPasswordField().getText());
 
+		librosController.cargarLibros();
+
 	}
 
 	public MainView getView() {
 		return view;
+	}
+
+	public Connection getConexion() {
+		return conexion.getCon();
 	}
 }
