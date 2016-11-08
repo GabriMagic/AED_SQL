@@ -53,7 +53,6 @@ public class MainController {
 			e.printStackTrace();
 		}
 
-		listaLibros = new ListaLibros();
 	}
 
 	private void vaciarTabla() {
@@ -64,13 +63,14 @@ public class MainController {
 
 	private void conectar() {
 
+		conexion.setRuta(view.getRutaBox().getValue());
+		conexion.setHost(view.getHostText().getText());
+		conexion.setPuerto(Integer.parseInt(view.getPuertoText().getText()));
+		conexion.setDb(view.getDbText().getText());
+		conexion.setUser(view.getUserText().getText());
+		conexion.setPassword(view.getPasswordField().getText());
+
 		try {
-			conexion.setRuta(view.getRutaBox().getValue());
-			conexion.setHost(view.getHostText().getText());
-			conexion.setPuerto(Integer.parseInt(view.getPuertoText().getText()));
-			conexion.setDb(view.getDbText().getText());
-			conexion.setUser(view.getUserText().getText());
-			conexion.setPassword(view.getPasswordField().getText());
 
 			if (conexion.conectar()) {
 				cargarLibros();

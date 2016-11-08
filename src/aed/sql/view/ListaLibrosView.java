@@ -45,4 +45,24 @@ public class ListaLibrosView extends BorderPane {
 		return librosTable;
 	}
 
+	public TableColumn<Libro, String> getCodLibroColumn() {
+		return codLibroColumn;
+	}
+
+	public TableColumn<Libro, String> getNombreLibroColumn() {
+		return nombreLibroColumn;
+	}
+
+	public TableColumn<Libro, String> getIsbnLibroColumn() {
+		return isbnLibroColumn;
+	}
+
+	public TableColumn<Libro, LocalDate> getFechaLibroColumn() {
+		return fechaLibroColumn;
+	}
+
+	public void setLibrosTable(TableView<Libro> librosTable) {
+		this.librosTable = librosTable;
+	}
+
 }
