@@ -21,14 +21,15 @@ public class MainController {
 	public MainController() {
 
 		view = new MainView();
-		librosController = new ListaLibrosController();
+		conexion = new Conexion();
+
+		librosController = new ListaLibrosController(conexion);
 		listaLibros = new ListaLibros();
 
-		conexion = new Conexion();
 
 		bindVistas();
 
-		librosController.getView().getLibrosTable().setItems(listaLibros.librosProperty());
+//		librosController.getView().getLibrosTable().setItems(listaLibros.librosProperty());
 
 		view.getConectarButton().setOnAction(e -> conectar());
 	}
@@ -38,22 +39,22 @@ public class MainController {
 
 	}
 
-	public void cargarLibros() {
-
-		try {
-
-			PreparedStatement sql = conexion.getConexion().prepareStatement("SELECT * FROM libros");
-			ResultSet resultado = sql.executeQuery();
-
-			while (resultado.next()) {
-				listaLibros.getLibros().add(new Libro(resultado.getInt(1), resultado.getString(2),
-						resultado.getString(3), resultado.getDate(4).toLocalDate()));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-	}
+//	public void cargarLibros() {
+//
+//		try {
+//
+//			PreparedStatement sql = conexion.getConexion().prepareStatement("SELECT * FROM libros");
+//			ResultSet resultado = sql.executeQuery();
+//
+//			while (resultado.next()) {
+//				listaLibros.getLibros().add(new Libro(resultado.getInt(1), resultado.getString(2),
+//						resultado.getString(3), resultado.getDate(4).toLocalDate()));
+//			}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//
+//	}
 
 	private void vaciarTabla() {
 		for (int i = 0; i < librosController.getView().getLibrosTable().getItems().size(); i++) {
@@ -73,7 +74,7 @@ public class MainController {
 		try {
 
 			if (conexion.conectar()) {
-				cargarLibros();
+//				cargarLibros();
 				view.getCir().setImage(new Image("resources/green.png"));
 
 			} else {
