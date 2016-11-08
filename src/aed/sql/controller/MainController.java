@@ -3,8 +3,6 @@ package aed.sql.controller;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import aed.sql.app.AedSqlAPP;
 import aed.sql.model.Conexion;
 import aed.sql.model.Libro;
 import aed.sql.model.ListaLibros;
@@ -15,7 +13,6 @@ import javafx.scene.image.Image;
 
 public class MainController {
 
-	private AedSqlAPP app;
 	private ListaLibros listaLibros;
 	private Conexion conexion;
 	private ListaLibrosController librosController;
@@ -23,7 +20,6 @@ public class MainController {
 
 	public MainController() {
 
-		app = new AedSqlAPP();
 		view = new MainView();
 		librosController = new ListaLibrosController();
 		listaLibros = new ListaLibros();
@@ -60,6 +56,12 @@ public class MainController {
 		listaLibros = new ListaLibros();
 	}
 
+	private void vaciarTabla() {
+		for (int i = 0; i < librosController.getView().getLibrosTable().getItems().size(); i++) {
+			librosController.getView().getLibrosTable().getItems().clear();
+		}
+	}
+
 	private void conectar() {
 
 		try {
@@ -70,19 +72,26 @@ public class MainController {
 			conexion.setUser(view.getUserText().getText());
 			conexion.setPassword(view.getPasswordField().getText());
 
-			if (!conexion.conectar()) {
+			if (conexion.conectar()) {
+				cargarLibros();
+				view.getCir().setImage(new Image("resources/green.png"));
+
+			} else {
 				Alert errorConnect = new Alert(AlertType.ERROR);
 				errorConnect.setHeaderText(null);
-				errorConnect.setContentText("Error al conectar con la base de datos "+view.getDbText().getText());
+				errorConnect.setContentText("Error al conectar con la base de datos: " + view.getDbText().getText());
 				errorConnect.show();
-			}else {
-				cargarLibros();
-				app.getPrimaryStage().getIcons().add(null);
+				view.getCir().setImage(new Image("resources/red.png"));
+				vaciarTabla();
 			}
 
-
 		} catch (NumberFormatException | NullPointerException e) {
-			System.out.println("EERROR");
+			Alert errorFormat = new Alert(AlertType.ERROR);
+			errorFormat.setTitle("Conexión SQL");
+			errorFormat.setHeaderText("Error al conectar");
+			errorFormat.setContentText("Complete los campos correctamente.");
+			errorFormat.show();
+			view.getCir().setImage(new Image("resources/red.png"));
 		}
 
 	}

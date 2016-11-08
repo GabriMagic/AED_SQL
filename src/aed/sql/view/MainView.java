@@ -9,6 +9,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 
 public class MainView extends BorderPane {
@@ -21,23 +22,29 @@ public class MainView extends BorderPane {
 	private PasswordField passwordField;
 	private ComboBox<String> rutaBox;
 
+	private ImageView cir;
+
 	private ArrayList<String> optionList;
 
 	public MainView() {
 
 		toolBar = new ToolBar();
 
+		cir = new ImageView("resources/red.png");
+		cir.setFitWidth(30);
+		cir.setFitHeight(30);
+
 		optionList = new ArrayList<>();
 		optionList.add("jdbc:mysql:");
 		optionList.add("Conexión JDBC");
 
 		conectarButton = new Button("Conectar");
+		conectarButton.setDefaultButton(true);
 
 		rutaBox = new ComboBox<>();
 		rutaBox.setItems(FXCollections.observableArrayList(optionList));
 		rutaBox.getSelectionModel().select(0);
-		
-		
+
 		hostText = new TextField("localhost");
 		hostText.setPromptText("Host...");
 
@@ -53,7 +60,7 @@ public class MainView extends BorderPane {
 		passwordField = new PasswordField();
 		passwordField.setPromptText("Contraseña...");
 
-		toolBar.getItems().addAll(rutaBox, hostText, puertoText, dbText, userText, passwordField, conectarButton);
+		toolBar.getItems().addAll(rutaBox, hostText, puertoText, dbText, userText, passwordField, conectarButton, cir);
 
 		librosTab = new Tab("Libros");
 		librosTab.setClosable(false);
@@ -94,6 +101,10 @@ public class MainView extends BorderPane {
 
 	public PasswordField getPasswordField() {
 		return passwordField;
+	}
+
+	public ImageView getCir() {
+		return cir;
 	}
 
 	public ComboBox<String> getRutaBox() {

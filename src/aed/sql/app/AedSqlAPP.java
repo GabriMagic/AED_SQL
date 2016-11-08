@@ -3,7 +3,6 @@ package aed.sql.app;
 import aed.sql.controller.MainController;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class AedSqlAPP extends Application {
@@ -18,7 +17,7 @@ public class AedSqlAPP extends Application {
 
 		mainController = new MainController();
 
-		primaryStage.getIcons().add(new Image("resources/red.png"));
+
 		primaryStage.setScene(new Scene(mainController.getView(), primaryStage.getWidth(), 480));
 		primaryStage.setTitle("AED SQL");
 		primaryStage.show();

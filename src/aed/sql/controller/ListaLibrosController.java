@@ -7,6 +7,7 @@ public class ListaLibrosController {
 	private ListaLibrosView view;
 
 	public ListaLibrosController() {
+
 		view = new ListaLibrosView();
 	}
 
