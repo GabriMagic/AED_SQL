@@ -3,15 +3,19 @@ package aed.sql.controller;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import aed.sql.app.AedSqlAPP;
 import aed.sql.model.Conexion;
 import aed.sql.model.Libro;
 import aed.sql.model.ListaLibros;
 import aed.sql.view.MainView;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 
 public class MainController {
 
+	private AedSqlAPP app;
 	private ListaLibros listaLibros;
 	private Conexion conexion;
 	private ListaLibrosController librosController;
@@ -19,6 +23,7 @@ public class MainController {
 
 	public MainController() {
 
+		app = new AedSqlAPP();
 		view = new MainView();
 		librosController = new ListaLibrosController();
 		listaLibros = new ListaLibros();
@@ -70,12 +75,14 @@ public class MainController {
 				errorConnect.setHeaderText(null);
 				errorConnect.setContentText("Error al conectar con la base de datos "+view.getDbText().getText());
 				errorConnect.show();
+			}else {
+				cargarLibros();
+				app.getPrimaryStage().getIcons().add(null);
 			}
 
-			cargarLibros();
 
 		} catch (NumberFormatException | NullPointerException e) {
-//			System.out.println("EERROR");
+			System.out.println("EERROR");
 		}
 
 	}
