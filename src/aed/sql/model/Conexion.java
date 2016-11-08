@@ -15,25 +15,18 @@ public class Conexion {
 	private String password;
 
 	public Conexion() {
-		try {
-			conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/bdbiblioteca", "root", "");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+
 	}
 
-	public Conexion(String ruta, String host, int puerto, String db, String user, String password) {
+	public boolean conectar() {
 		try {
 
-			System.out.println(ruta + "//" + host + ":" + puerto + "/" + db);
-			conexion = DriverManager.getConnection(ruta + "//" + host + ":" + puerto + "/" + db, user, password);
+			String link = ruta + "//" + host + ":" + puerto + "/" + db;
+			conexion = DriverManager.getConnection(link, user, password);
+			return true;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			return false;
 		}
-	}
-
-	public Connection getCon() {
-		return conexion;
 	}
 
 	public Connection getConexion() {
@@ -91,4 +84,5 @@ public class Conexion {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
 }
