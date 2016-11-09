@@ -9,6 +9,7 @@ public class Conexion {
 
 	private String ruta, host, db, user, password, link = "";
 	private int puerto;
+	private boolean connected;
 
 	public Conexion(String ruta, String host, int puerto, String db, String user, String password) {
 
@@ -18,6 +19,7 @@ public class Conexion {
 		this.db = db;
 		this.user = user;
 		this.password = password;
+		connected = true;
 
 	}
 
@@ -82,6 +84,14 @@ public class Conexion {
 
 	public void setLink(String link) {
 		this.link = link;
+	}
+
+	public boolean isConnected() {
+		return connected;
+	}
+
+	public void setConnected(boolean connected) {
+		this.connected = connected;
 	}
 
 	public int getPuerto() {

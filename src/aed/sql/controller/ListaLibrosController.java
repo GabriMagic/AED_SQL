@@ -15,34 +15,39 @@ public class ListaLibrosController {
 	private Conexion conexion;
 	private ListaLibros listaLibros;
 
-
 	public ListaLibrosController(Conexion conexion) {
-		
+
 		view = new ListaLibrosView();
 
 		this.conexion = conexion;
 		conexion.conectar();
-		
+
 		listaLibros = new ListaLibros();
-		
-		cargarLibros();
-		
-		view.getLibrosTable().setItems(listaLibros.librosProperty());
 
 	}
 
 	public void cargarLibros() {
-
+		view.getLibrosTable().setItems(listaLibros.librosProperty());
 		try {
-			PreparedStatement sql = conexion.getConexion().prepareStatement("SELECT * FROM libros");
+
+			String query = "SELECT lb.codLibro, nombreLibro, ISBN, fechaIntro, codEjemplar, importe, nombreAutor FROM libros as lb "
+					+ "inner join ejemplares as ej on ej.codLibro = lb.codLibro "
+					+ "inner join librosautores as lau on lau.codLibro = lb.codLibro "
+					+ "inner join autores as au on au.codAutor = lau.codAutor";
+
+			PreparedStatement sql = conexion.getConexion().prepareStatement(query);
 
 			ResultSet resultado = sql.executeQuery();
 
 			while (resultado.next()) {
-				listaLibros.getLibros().add(new Libro(resultado.getInt(1), resultado.getString(2),
-						resultado.getString(3), resultado.getDate(4).toLocalDate()));
+
+				listaLibros.getLibros()
+						.add(new Libro(resultado.getInt(1), resultado.getString(2), resultado.getString(3),
+								resultado.getDate(4).toLocalDate(), resultado.getInt(5), resultado.getDouble(6),
+								resultado.getString(7)));
 			}
 		} catch (SQLException e) {
+			e.printStackTrace();
 			System.err.println("ERROR AQUIIIIIIIIIIIIII");
 		}
 
@@ -50,5 +55,9 @@ public class ListaLibrosController {
 
 	public ListaLibrosView getView() {
 		return view;
+	}
+	
+	public ListaLibros getListaLibros() {
+		return listaLibros;
 	}
 }
