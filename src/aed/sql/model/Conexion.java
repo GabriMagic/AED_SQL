@@ -4,34 +4,17 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
 public class Conexion {
 	private Connection conexion;
 
 	private String ruta, host, db, user, password, link = "";
 	private int puerto;
 
-	// private StringProperty ruta, host, db, user, password, link;
-	// private IntegerProperty puerto;
-
-	// public Conexion() {
-	//
-	// ruta = new SimpleStringProperty(this, "ruta", "jdbc:mysql:");
-	// host = new SimpleStringProperty(this, "host", "localhsot");
-	// puerto = new SimpleIntegerProperty(this, "puerto", 3306);
-	// db = new SimpleStringProperty(this, "db", "bdbiblioteca");
-	// user = new SimpleStringProperty(this, "user", "root");
-	// password = new SimpleStringProperty(this, "password", "");
-	// }
-
 	public Conexion(String ruta, String host, int puerto, String db, String user, String password) {
 
 		this.ruta = ruta;
 		this.host = host;
+		this.puerto = puerto;
 		this.db = db;
 		this.user = user;
 		this.password = password;
@@ -41,9 +24,6 @@ public class Conexion {
 	public boolean conectar() {
 		try {
 
-			// link = new SimpleStringProperty(this, "link ", ruta + "//" + host
-			// + ":" + puerto + "/" + db);
-			System.out.println("THIS "+link);
 			link = ruta + "//" + host + ":" + puerto + "/" + db;
 			conexion = DriverManager.getConnection(link, user, password);
 			return true;
