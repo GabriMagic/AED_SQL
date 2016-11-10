@@ -16,6 +16,7 @@ public class MainController {
 	private MainView view;
 	private Stage app;
 
+	
 	public MainController(Stage primaryStage) {
 
 		view = new MainView();
@@ -52,8 +53,8 @@ public class MainController {
 			if (conexion.conectar()) {
 
 				app.setTitle("Conectado a: MySQL");
-//				if (conexion.isConnected())
-					librosController.cargarLibros();
+				// if (conexion.isConnected())
+				librosController.cargarLibros();
 				view.getCir().setImage(new Image("resources/green.png"));
 
 			} else {

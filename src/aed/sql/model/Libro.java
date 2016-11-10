@@ -36,54 +36,6 @@ public class Libro {
 		fechaIntro = new SimpleObjectProperty<>(this, "fechaIntro");
 	}
 
-	public final IntegerProperty codProperty() {
-		return this.codLibro;
-	}
-
-	public final int getCod() {
-		return this.codProperty().get();
-	}
-
-	public final void setCod(final int cod) {
-		this.codProperty().set(cod);
-	}
-
-	public final SimpleStringProperty nombreProperty() {
-		return this.nombre;
-	}
-
-	public final String getNombre() {
-		return this.nombreProperty().get();
-	}
-
-	public final void setNombre(final String nombre) {
-		this.nombreProperty().set(nombre);
-	}
-
-	public final SimpleStringProperty isbnProperty() {
-		return this.isbn;
-	}
-
-	public final String getIsbn() {
-		return this.isbnProperty().get();
-	}
-
-	public final void setIsbn(final String isbn) {
-		this.isbnProperty().set(isbn);
-	}
-
-	public final ObjectProperty<LocalDate> fechaIntroProperty() {
-		return this.fechaIntro;
-	}
-
-	public final LocalDate getFechaIntro() {
-		return this.fechaIntroProperty().get();
-	}
-
-	public final void setFechaIntro(final LocalDate fechaIntro) {
-		this.fechaIntroProperty().set(fechaIntro);
-	}
-
 	public IntegerProperty codLibroProperty() {
 		return this.codLibro;
 	}
@@ -108,6 +60,30 @@ public class Libro {
 		this.codEjemplarProperty().set(codEjemplar);
 	}
 
+	public SimpleStringProperty nombreProperty() {
+		return this.nombre;
+	}
+
+	public String getNombre() {
+		return this.nombreProperty().get();
+	}
+
+	public void setNombre(final String nombre) {
+		this.nombreProperty().set(nombre);
+	}
+
+	public SimpleStringProperty isbnProperty() {
+		return this.isbn;
+	}
+
+	public String getIsbn() {
+		return this.isbnProperty().get();
+	}
+
+	public void setIsbn(final String isbn) {
+		this.isbnProperty().set(isbn);
+	}
+
 	public SimpleStringProperty autorProperty() {
 		return this.autor;
 	}
@@ -118,6 +94,18 @@ public class Libro {
 
 	public void setAutor(final String autor) {
 		this.autorProperty().set(autor);
+	}
+
+	public ObjectProperty<LocalDate> fechaIntroProperty() {
+		return this.fechaIntro;
+	}
+
+	public LocalDate getFechaIntro() {
+		return this.fechaIntroProperty().get();
+	}
+
+	public void setFechaIntro(final LocalDate fechaIntro) {
+		this.fechaIntroProperty().set(fechaIntro);
 	}
 
 	public DoubleProperty importeProperty() {

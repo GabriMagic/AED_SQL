@@ -27,7 +27,7 @@ public class ListaLibrosView extends BorderPane {
 		librosTable = new TableView<>();
 
 		codLibroColumn = new TableColumn<>("Código");
-		codLibroColumn.setCellValueFactory(new PropertyValueFactory<>("cod"));
+		codLibroColumn.setCellValueFactory(new PropertyValueFactory<>("codLibro"));
 
 		nombreLibroColumn = new TableColumn<>("Nombre");
 		nombreLibroColumn.setPrefWidth(200);
