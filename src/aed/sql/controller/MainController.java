@@ -9,7 +9,7 @@ import javafx.scene.image.Image;
 public class MainController {
 
 	private Conexion conexion;
-	private ListaEjemplaresController ejemplaresController;
+	private ListaLibrosController librosController;
 	private MainView view;
 
 	public MainController() {
@@ -22,7 +22,7 @@ public class MainController {
 
 		conexion.conectar();
 
-		ejemplaresController = new ListaEjemplaresController(conexion);
+		librosController = new ListaLibrosController(conexion);
 
 		bindVistas();
 
@@ -30,7 +30,7 @@ public class MainController {
 	}
 
 	private void bindVistas() {
-		view.getLibrosTab().setContent(ejemplaresController.getView());
+		view.getLibrosTab().setContent(librosController.getView());
 
 	}
 
@@ -47,8 +47,8 @@ public class MainController {
 
 			if (conexion.conectar()) {
 
-				ejemplaresController.getListaLibros().librosProperty().clear();
-				ejemplaresController.cargarLibros();
+				librosController.getListaLibros().librosProperty().clear();
+				librosController.cargarLibros();
 				view.getCir().setImage(new Image("resources/green.png"));
 
 			} else {
@@ -57,7 +57,7 @@ public class MainController {
 				errorConnect.setContentText("Error al conectar con la base de datos: " + view.getDbText().getText());
 				errorConnect.show();
 				view.getCir().setImage(new Image("resources/red.png"));
-				ejemplaresController.getView().getLibrosTable().setItems(null);
+				librosController.getView().getLibrosTable().setItems(null);
 			}
 
 		} catch (NumberFormatException | NullPointerException e) {

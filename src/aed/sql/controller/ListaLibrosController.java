@@ -7,17 +7,17 @@ import java.sql.SQLException;
 import aed.sql.model.Conexion;
 import aed.sql.model.Libro;
 import aed.sql.model.ListaLibros;
-import aed.sql.view.ListaEjemplaresView;
+import aed.sql.view.ListaLibrosView;
 
-public class ListaEjemplaresController {
+public class ListaLibrosController {
 
-	private ListaEjemplaresView view;
-	private Conexion conexion;
+	private ListaLibrosView view;
 	private ListaLibros listaLibros;
+	private Conexion conexion;
 
-	public ListaEjemplaresController(Conexion conexion) {
+	public ListaLibrosController(Conexion conexion) {
 
-		view = new ListaEjemplaresView();
+		view = new ListaLibrosView();
 
 		this.conexion = conexion;
 		conexion.conectar();
@@ -53,7 +53,7 @@ public class ListaEjemplaresController {
 
 	}
 
-	public ListaEjemplaresView getView() {
+	public ListaLibrosView getView() {
 		return view;
 	}
 
