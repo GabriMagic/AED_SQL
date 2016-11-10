@@ -8,6 +8,7 @@ import aed.sql.model.Conexion;
 import aed.sql.model.Libro;
 import aed.sql.model.ListaLibros;
 import aed.sql.view.ListaLibrosView;
+import javafx.event.ActionEvent;
 
 public class ListaLibrosController {
 
@@ -23,7 +24,13 @@ public class ListaLibrosController {
 		conexion.conectar();
 
 		listaLibros = new ListaLibros();
+		
+		view.getAddLibroButton().setOnAction(e -> onAddButtonAction(e));
 
+	}
+
+	private void onAddButtonAction(ActionEvent e) {
+		
 	}
 
 	public void cargarLibros() {

@@ -84,6 +84,26 @@ public class ListaLibrosView extends BorderPane {
 		return isbnLibroColumn;
 	}
 
+	public TableColumn<Libro, String> getAutorColumn() {
+		return autorColumn;
+	}
+
+	public TableColumn<Libro, Integer> getEjemplarColumn() {
+		return ejemplarColumn;
+	}
+
+	public TableColumn<Libro, Double> getImporteColumn() {
+		return importeColumn;
+	}
+
+	public Button getAddLibroButton() {
+		return addLibroButton;
+	}
+
+	public Button getEliminarLibroButton() {
+		return eliminarLibroButton;
+	}
+
 	public TableColumn<Libro, LocalDate> getFechaLibroColumn() {
 		return fechaLibroColumn;
 	}
