@@ -109,11 +109,16 @@ public class ListaLibrosController {
 
 				if (answer.get() == ButtonType.OK) {
 					try {
-						PreparedStatement query = conexion.getConexion()
+						PreparedStatement query2 = conexion.getConexion()
 								.prepareStatement("DELETE FROM librosautores WHERE codLibro = ?");
+						System.out.println(aux);
+						query2.setInt(1, aux);
 						
-						
+						query2.execute();
+						cargarLibros();
+
 					} catch (SQLException e2) {
+						System.out.println(e2.getLocalizedMessage());
 					}
 
 				} else {
