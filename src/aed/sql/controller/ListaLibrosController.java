@@ -56,7 +56,7 @@ public class ListaLibrosController {
 	public ListaLibrosView getView() {
 		return view;
 	}
-	
+
 	public ListaLibros getListaLibros() {
 		return listaLibros;
 	}
