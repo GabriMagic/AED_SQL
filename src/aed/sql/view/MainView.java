@@ -62,9 +62,9 @@ public class MainView extends BorderPane {
 
 		toolBar.getItems().addAll(rutaBox, hostText, puertoText, dbText, userText, passwordField, conectarButton, cir);
 
-		librosTab = new Tab("Libros");
+		librosTab = new Tab("Ejemplares");
 		librosTab.setClosable(false);
-		insertTab = new Tab("Insertar");
+		insertTab = new Tab("Libros");
 		insertTab.setClosable(false);
 
 		TabPane tabPane = new TabPane();

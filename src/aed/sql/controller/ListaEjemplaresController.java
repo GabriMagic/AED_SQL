@@ -7,17 +7,17 @@ import java.sql.SQLException;
 import aed.sql.model.Conexion;
 import aed.sql.model.Libro;
 import aed.sql.model.ListaLibros;
-import aed.sql.view.ListaLibrosView;
+import aed.sql.view.ListaEjemplaresView;
 
-public class ListaLibrosController {
+public class ListaEjemplaresController {
 
-	private ListaLibrosView view;
+	private ListaEjemplaresView view;
 	private Conexion conexion;
 	private ListaLibros listaLibros;
 
-	public ListaLibrosController(Conexion conexion) {
+	public ListaEjemplaresController(Conexion conexion) {
 
-		view = new ListaLibrosView();
+		view = new ListaEjemplaresView();
 
 		this.conexion = conexion;
 		conexion.conectar();
@@ -31,9 +31,9 @@ public class ListaLibrosController {
 		try {
 
 			String query = "SELECT lb.codLibro, nombreLibro, ISBN, fechaIntro, codEjemplar, importe, nombreAutor FROM libros as lb "
-					+ "inner join ejemplares as ej on ej.codLibro = lb.codLibro "
-					+ "inner join librosautores as lau on lau.codLibro = lb.codLibro "
-					+ "inner join autores as au on au.codAutor = lau.codAutor";
+					+ "left join ejemplares as ej on ej.codLibro = lb.codLibro "
+					+ "left join librosautores as lau on lau.codLibro = lb.codLibro "
+					+ "left join autores as au on au.codAutor = lau.codAutor";
 
 			PreparedStatement sql = conexion.getConexion().prepareStatement(query);
 
@@ -53,7 +53,7 @@ public class ListaLibrosController {
 
 	}
 
-	public ListaLibrosView getView() {
+	public ListaEjemplaresView getView() {
 		return view;
 	}
 

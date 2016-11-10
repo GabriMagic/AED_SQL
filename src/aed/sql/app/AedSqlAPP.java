@@ -17,7 +17,6 @@ public class AedSqlAPP extends Application {
 
 		mainController = new MainController();
 
-
 		primaryStage.setScene(new Scene(mainController.getView(), primaryStage.getWidth(), 480));
 		primaryStage.setTitle("AED SQL");
 		primaryStage.show();

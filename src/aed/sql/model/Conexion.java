@@ -25,7 +25,6 @@ public class Conexion {
 
 	public boolean conectar() {
 		try {
-
 			link = ruta + "//" + host + ":" + puerto + "/" + db;
 			conexion = DriverManager.getConnection(link, user, password);
 			return true;
