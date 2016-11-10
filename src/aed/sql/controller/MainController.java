@@ -1,24 +1,28 @@
 package aed.sql.controller;
 
+import java.sql.SQLException;
+
 import aed.sql.model.Conexion;
 import aed.sql.view.MainView;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
+import javafx.stage.Stage;
 
 public class MainController {
 
 	private Conexion conexion;
 	private ListaLibrosController librosController;
 	private MainView view;
+	private Stage app;
 
-	public MainController() {
+	public MainController(Stage primaryStage) {
 
 		view = new MainView();
 
-		conexion = new Conexion(view.getRutaBox().getValue(), view.getHostText().getText(),
-				Integer.parseInt(view.getPuertoText().getText()), view.getDbText().getText(),
-				view.getUserText().getText(), view.getPasswordField().getText());
+		conexion = new Conexion();
+
+		app = primaryStage;
 
 		conexion.conectar();
 
@@ -47,8 +51,9 @@ public class MainController {
 
 			if (conexion.conectar()) {
 
-				librosController.getListaLibros().librosProperty().clear();
-				librosController.cargarLibros();
+				app.setTitle("Conectado a: MySQL");
+//				if (conexion.isConnected())
+					librosController.cargarLibros();
 				view.getCir().setImage(new Image("resources/green.png"));
 
 			} else {
@@ -56,8 +61,15 @@ public class MainController {
 				errorConnect.setHeaderText(null);
 				errorConnect.setContentText("Error al conectar con la base de datos: " + view.getDbText().getText());
 				errorConnect.show();
+
+				librosController.getListaLibros().getLibros().clear();
+				app.setTitle("-------");
 				view.getCir().setImage(new Image("resources/red.png"));
-				librosController.getView().getLibrosTable().setItems(null);
+				try {
+					conexion.getConexion().close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
 
 		} catch (NumberFormatException | NullPointerException e) {
@@ -66,7 +78,13 @@ public class MainController {
 			errorFormat.setHeaderText("Error al conectar");
 			errorFormat.setContentText("Complete los campos correctamente.");
 			errorFormat.show();
+			app.setTitle("-------");
 			view.getCir().setImage(new Image("resources/red.png"));
+			try {
+				conexion.getConexion().close();
+			} catch (SQLException err) {
+				System.out.println("HEREE");
+			}
 		}
 
 	}

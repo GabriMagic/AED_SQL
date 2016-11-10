@@ -11,6 +11,10 @@ public class Conexion {
 	private int puerto;
 	private boolean connected;
 
+	public Conexion() {
+
+	}
+
 	public Conexion(String ruta, String host, int puerto, String db, String user, String password) {
 
 		this.ruta = ruta;
@@ -27,10 +31,11 @@ public class Conexion {
 		try {
 			link = ruta + "//" + host + ":" + puerto + "/" + db;
 			conexion = DriverManager.getConnection(link, user, password);
-			return true;
+			connected = true;
 		} catch (SQLException e) {
-			return false;
+			connected = false;
 		}
+		return connected;
 	}
 
 	public Connection getConexion() {
