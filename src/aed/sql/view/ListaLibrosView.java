@@ -5,6 +5,8 @@ import aed.sql.model.Libro;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -20,11 +22,20 @@ public class ListaLibrosView extends BorderPane {
 	private TableColumn<Libro, LocalDate> fechaLibroColumn;
 	private TableColumn<Libro, Integer> ejemplarColumn;
 	private TableColumn<Libro, Double> importeColumn;
-	private Button addLibroButton, eliminarLibroButton;
+	private Button addLibroButton;
+	private ContextMenu contextMenu;
+	private MenuItem eliminarMenu, addAutorMenu;
 
 	public ListaLibrosView() {
 
+		eliminarMenu = new MenuItem("Eliminar");
+		addAutorMenu = new MenuItem("Añadir autor");
+
+		contextMenu = new ContextMenu();
+		contextMenu.getItems().addAll(eliminarMenu, addAutorMenu);
+
 		librosTable = new TableView<>();
+		librosTable.setContextMenu(contextMenu);
 
 		codLibroColumn = new TableColumn<>("Código");
 		codLibroColumn.setCellValueFactory(new PropertyValueFactory<>("codLibro"));
@@ -58,9 +69,8 @@ public class ListaLibrosView extends BorderPane {
 		librosTable.getColumns().add(importeColumn);
 
 		addLibroButton = new Button("Añadir");
-		eliminarLibroButton = new Button("Eliminar");
 
-		HBox botones = new HBox(5, addLibroButton, eliminarLibroButton);
+		HBox botones = new HBox(5, addLibroButton);
 		botones.setPadding(new Insets(5));
 		botones.setAlignment(Pos.BASELINE_RIGHT);
 
@@ -100,16 +110,20 @@ public class ListaLibrosView extends BorderPane {
 		return addLibroButton;
 	}
 
-	public Button getEliminarLibroButton() {
-		return eliminarLibroButton;
-	}
-
 	public TableColumn<Libro, LocalDate> getFechaLibroColumn() {
 		return fechaLibroColumn;
 	}
 
 	public void setLibrosTable(TableView<Libro> librosTable) {
 		this.librosTable = librosTable;
+	}
+
+	public MenuItem getEliminarMenu() {
+		return eliminarMenu;
+	}
+
+	public MenuItem getAddAutorMenu() {
+		return addAutorMenu;
 	}
 
 }

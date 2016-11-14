@@ -11,9 +11,9 @@ public class AedSqlAPP extends Application {
 	private Stage primaryStage;
 
 	@Override
-	public void start(Stage stg) throws Exception {
+	public void start(Stage primaryStage) throws Exception {
 
-		this.primaryStage = stg;
+		this.primaryStage = primaryStage;
 
 		mainController = new MainController(primaryStage);
 
@@ -29,5 +29,4 @@ public class AedSqlAPP extends Application {
 	public Stage getPrimaryStage() {
 		return primaryStage;
 	}
-
 }

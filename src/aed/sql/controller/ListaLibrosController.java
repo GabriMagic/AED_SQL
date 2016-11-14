@@ -70,7 +70,7 @@ public class ListaLibrosController {
 		insertStage.setScene(new Scene(insertLibroView));
 
 		view.getAddLibroButton().setOnAction(e -> onAddButtonAction(e));
-		view.getEliminarLibroButton().setOnAction(e -> onEliminarButtonAction(e));
+		view.getEliminarMenu().setOnAction(e -> onEliminarButtonAction(e));
 
 	}
 
@@ -92,13 +92,22 @@ public class ListaLibrosController {
 
 		if (conexion.conectar()) {
 			try {
-				PreparedStatement query = conexion.getConexion()
-						.prepareStatement("DELETE FROM libros WHERE codLibro = ?");
+				Alert eliminarConfirm = new Alert(AlertType.CONFIRMATION);
+				eliminarConfirm.setTitle("Atención!");
+				eliminarConfirm.setHeaderText("Esta accción no se puede deshacer");
+				eliminarConfirm.setContentText("¿Desea eliminar el libro de todas formas?");
 
-				query.setInt(1, aux);
-				query.execute();
+				Optional<ButtonType> answer = eliminarConfirm.showAndWait();
 
-				cargarLibros();
+				if (answer.get() == ButtonType.OK) {
+					PreparedStatement query = conexion.getConexion()
+							.prepareStatement("DELETE FROM libros WHERE codLibro = ?");
+
+					query.setInt(1, aux);
+					query.execute();
+
+					cargarLibros();
+				}
 			} catch (SQLException e1) {
 				Alert eliminarConfirm = new Alert(AlertType.CONFIRMATION);
 				eliminarConfirm.setTitle("Error al borrar");
@@ -113,7 +122,7 @@ public class ListaLibrosController {
 								.prepareStatement("DELETE FROM librosautores WHERE codLibro = ?");
 						System.out.println(aux);
 						query2.setInt(1, aux);
-						
+
 						query2.execute();
 						cargarLibros();
 
