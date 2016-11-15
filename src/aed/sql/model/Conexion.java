@@ -23,13 +23,14 @@ public class Conexion {
 		this.db = db;
 		this.user = user;
 		this.password = password;
-		connected = true;
 
 	}
 
 	public boolean conectar() {
+
 		try {
 			link = ruta + "//" + host + ":" + puerto + "/" + db;
+			System.out.println(link);
 			conexion = DriverManager.getConnection(link, user, password);
 			connected = true;
 		} catch (SQLException e) {

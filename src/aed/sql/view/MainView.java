@@ -1,11 +1,11 @@
-package aed.sql.view;
+ package aed.sql.view;
 
 import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.Tab;
+import javafx.scene.control.Tab; 
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
@@ -36,7 +36,7 @@ public class MainView extends BorderPane {
 
 		optionList = new ArrayList<>();
 		optionList.add("jdbc:mysql:");
-		optionList.add("Conexión JDBC");
+		optionList.add("jdbc:ucanaccess:");
 
 		conectarButton = new Button("Conectar");
 		conectarButton.setDefaultButton(true);

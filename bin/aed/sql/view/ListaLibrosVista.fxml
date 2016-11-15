@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+
+<BorderPane fx:id="view" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.60">
+   <center>
+      <TableView fx:id="tablaLibros" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="codLibroColumn" prefWidth="75.0" text="Código" />
+          <TableColumn fx:id="nombreLibroColumn" prefWidth="75.0" text="Nombre" />
+            <TableColumn fx:id="isbnColumn" prefWidth="75.0" text="ISBN" />
+            <TableColumn fx:id="fechaIntroColumn" prefWidth="75.0" text="Fecha Intro" />
+            <TableColumn fx:id="codEjemplarColumn" prefWidth="75.0" text="Ejemplar" />
+            <TableColumn fx:id="autorColumn" prefWidth="75.0" text="Autor" />
+            <TableColumn fx:id="importeColumn" prefWidth="75.0" text="Importe" />
+        </columns>
+         <contextMenu>
+            <ContextMenu fx:id="contextMenu">
+              <items>
+                <MenuItem fx:id="eliminarMenu" mnemonicParsing="false" onAction="#onEliminarButtonAction" text="Eliminar" />
+                  <MenuItem fx:id="addAutorMenu" mnemonicParsing="false" text="Añadir autor" />
+              </items>
+            </ContextMenu>
+         </contextMenu>
+      </TableView>
+   </center>
+   <bottom>
+      <VBox prefHeight="0.0" prefWidth="0.0" spacing="5.0" BorderPane.alignment="CENTER">
+         <children>
+            <Separator prefWidth="200.0" />
+            <Button fx:id="addLibroButton" mnemonicParsing="false" onAction="#onAddButtonAction" text="Añadir" />
+         </children>
+         <padding>
+            <Insets top="5.0" />
+         </padding>
+      </VBox>
+   </bottom>
+</BorderPane>

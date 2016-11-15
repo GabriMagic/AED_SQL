@@ -16,15 +16,13 @@ public class MainController {
 	private MainView view;
 	private Stage app;
 
-	
 	public MainController(Stage primaryStage) {
 
 		view = new MainView();
 
-		conexion = new Conexion();
-
 		app = primaryStage;
 
+		conexion = new Conexion();
 		conexion.conectar();
 
 		librosController = new ListaLibrosController(conexion);
