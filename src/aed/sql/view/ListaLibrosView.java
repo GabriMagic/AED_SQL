@@ -25,7 +25,7 @@ public class ListaLibrosView extends BorderPane {
 		addLibroMenu = new MenuItem("Añadir libro");
 
 		contextMenu = new ContextMenu();
-		contextMenu.getItems().addAll(eliminarMenu, addLibroMenu);
+		contextMenu.getItems().addAll(addLibroMenu, eliminarMenu);
 
 		librosTable = new TableView<>();
 		librosTable.setEditable(true);
