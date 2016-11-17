@@ -1,11 +1,11 @@
- package aed.sql.view;
+package aed.sql.view;
 
 import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.Tab; 
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
@@ -17,7 +17,7 @@ public class MainView extends BorderPane {
 	private Tab librosTab, insertTab;
 	private ToolBar toolBar;
 
-	private Button conectarButton;
+	private Button conectarButton, actualizarButton;
 	private TextField hostText, puertoText, dbText, userText;
 	private PasswordField passwordField;
 	private ComboBox<String> rutaBox;
@@ -41,6 +41,8 @@ public class MainView extends BorderPane {
 		conectarButton = new Button("Conectar");
 		conectarButton.setDefaultButton(true);
 
+		actualizarButton = new Button("Actualizar");
+
 		rutaBox = new ComboBox<>();
 		rutaBox.setItems(FXCollections.observableArrayList(optionList));
 		rutaBox.getSelectionModel().select(0);
@@ -60,7 +62,8 @@ public class MainView extends BorderPane {
 		passwordField = new PasswordField();
 		passwordField.setPromptText("Contraseña...");
 
-		toolBar.getItems().addAll(rutaBox, hostText, puertoText, dbText, userText, passwordField, conectarButton, cir);
+		toolBar.getItems().addAll(rutaBox, hostText, puertoText, dbText, userText, passwordField, conectarButton,
+				actualizarButton, cir);
 
 		librosTab = new Tab("Libros");
 		librosTab.setClosable(false);
@@ -85,6 +88,10 @@ public class MainView extends BorderPane {
 
 	public TextField getHostText() {
 		return hostText;
+	}
+
+	public Button getActualizarButton() {
+		return actualizarButton;
 	}
 
 	public TextField getPuertoText() {

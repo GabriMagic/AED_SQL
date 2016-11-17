@@ -13,12 +13,12 @@ import javafx.beans.property.SimpleStringProperty;
 public class Libro {
 
 	private IntegerProperty codLibro, codEjemplar;
-	private SimpleStringProperty nombre, isbn, autor;
+	private SimpleStringProperty nombre, isbn, autor, codAutor;
 	private ObjectProperty<LocalDate> fechaIntro;
 	private DoubleProperty importe;
 
 	public Libro(Integer cod, String nombre, String isbn, LocalDate fechaIntro, Integer codEjemplar, Double importe,
-			String autor) {
+			String autor, String codAutor) {
 		this.codLibro = new SimpleIntegerProperty(this, "cod", cod);
 		this.nombre = new SimpleStringProperty(this, "nombre", nombre);
 		this.isbn = new SimpleStringProperty(this, "isbn", isbn);
@@ -27,12 +27,14 @@ public class Libro {
 		this.codEjemplar = new SimpleIntegerProperty(this, "codEjemplar", codEjemplar);
 		this.importe = new SimpleDoubleProperty(this, "importe", importe);
 		this.autor = new SimpleStringProperty(this, "autor", autor);
+		this.codAutor = new SimpleStringProperty(this, "codAutor", codAutor);
 	}
 
 	public Libro() {
 		codLibro = new SimpleIntegerProperty(this, "cod");
 		nombre = new SimpleStringProperty(this, "nombre");
 		isbn = new SimpleStringProperty(this, "isbn");
+		codAutor = new SimpleStringProperty(this, "codAutor");
 		fechaIntro = new SimpleObjectProperty<>(this, "fechaIntro");
 	}
 
@@ -118,6 +120,18 @@ public class Libro {
 
 	public void setImporte(final double importe) {
 		this.importeProperty().set(importe);
+	}
+
+	public SimpleStringProperty codAutorProperty() {
+		return this.codAutor;
+	}
+
+	public String getCodAutor() {
+		return this.codAutorProperty().get();
+	}
+
+	public void setCodAutor(final String codAutor) {
+		this.codAutorProperty().set(codAutor);
 	}
 
 }

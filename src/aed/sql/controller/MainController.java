@@ -30,6 +30,7 @@ public class MainController {
 		bindVistas();
 
 		view.getConectarButton().setOnAction(e -> conectar());
+		view.getActualizarButton().setOnAction(e -> librosController.cargarLibros());
 	}
 
 	private void bindVistas() {

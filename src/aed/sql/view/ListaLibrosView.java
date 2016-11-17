@@ -2,39 +2,33 @@ package aed.sql.view;
 
 import java.time.LocalDate;
 import aed.sql.model.Libro;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Separator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
 public class ListaLibrosView extends BorderPane {
 
 	private TableView<Libro> librosTable;
-	private TableColumn<Libro, String> codLibroColumn, nombreLibroColumn, isbnLibroColumn, autorColumn;
+	private TableColumn<Libro, String> nombreLibroColumn, isbnLibroColumn, autorColumn;
 	private TableColumn<Libro, LocalDate> fechaLibroColumn;
-	private TableColumn<Libro, Integer> ejemplarColumn;
+	private TableColumn<Libro, Integer> codLibroColumn, ejemplarColumn;
 	private TableColumn<Libro, Double> importeColumn;
-	private Button addLibroButton;
 	private ContextMenu contextMenu;
-	private MenuItem eliminarMenu, addAutorMenu;
+	private MenuItem eliminarMenu, addLibroMenu;
 
 	public ListaLibrosView() {
 
 		eliminarMenu = new MenuItem("Eliminar");
-		addAutorMenu = new MenuItem("Añadir autor");
+		addLibroMenu = new MenuItem("Añadir libro");
 
 		contextMenu = new ContextMenu();
-		contextMenu.getItems().addAll(eliminarMenu, addAutorMenu);
+		contextMenu.getItems().addAll(eliminarMenu, addLibroMenu);
 
 		librosTable = new TableView<>();
+		librosTable.setEditable(true);
 		librosTable.setContextMenu(contextMenu);
 
 		codLibroColumn = new TableColumn<>("Código");
@@ -68,22 +62,19 @@ public class ListaLibrosView extends BorderPane {
 		librosTable.getColumns().add(autorColumn);
 		librosTable.getColumns().add(importeColumn);
 
-		addLibroButton = new Button("Añadir");
-
-		HBox botones = new HBox(5, addLibroButton);
-		botones.setPadding(new Insets(5));
-		botones.setAlignment(Pos.BASELINE_RIGHT);
-
 		setCenter(librosTable);
-		setBottom(new VBox(5, new Separator(), botones));
 	}
 
 	public TableView<Libro> getLibrosTable() {
 		return librosTable;
 	}
 
-	public TableColumn<Libro, String> getCodLibroColumn() {
+	public TableColumn<Libro, Integer> getCodLibroColumn() {
 		return codLibroColumn;
+	}
+
+	public ContextMenu getContextMenu() {
+		return contextMenu;
 	}
 
 	public TableColumn<Libro, String> getNombreLibroColumn() {
@@ -106,10 +97,6 @@ public class ListaLibrosView extends BorderPane {
 		return importeColumn;
 	}
 
-	public Button getAddLibroButton() {
-		return addLibroButton;
-	}
-
 	public TableColumn<Libro, LocalDate> getFechaLibroColumn() {
 		return fechaLibroColumn;
 	}
@@ -122,8 +109,8 @@ public class ListaLibrosView extends BorderPane {
 		return eliminarMenu;
 	}
 
-	public MenuItem getAddAutorMenu() {
-		return addAutorMenu;
+	public MenuItem getAddLibroMenu() {
+		return addLibroMenu;
 	}
 
 }
