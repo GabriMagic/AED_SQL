@@ -17,7 +17,6 @@ public class Conexion {
 	}
 
 	public boolean conectar() {
-		System.out.println(link);
 
 		switch (ruta) {
 		case "jdbc:mysql:":
@@ -52,7 +51,6 @@ public class Conexion {
 			}
 			break;
 		}
-		System.out.println(connected);
 		return connected;
 	}
 
