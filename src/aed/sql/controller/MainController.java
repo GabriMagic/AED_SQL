@@ -38,7 +38,7 @@ public class MainController {
 
 	private void conectar() {
 
-		System.out.println(view.getRutaBox().getValue());
+		System.out.println(view.getPuertoText().getText());
 
 		conexion.setRuta(view.getRutaBox().getValue());
 		conexion.setHost(view.getHostText().getText());
