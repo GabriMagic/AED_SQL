@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -227,14 +227,15 @@ public class ListaLibrosController {
 				Optional<ButtonType> answer = eliminarConfirm.showAndWait();
 				if (answer.get() == ButtonType.OK) {
 					try {
+						PreparedStatement query3 = conexion.getConexion()
+								.prepareStatement("DELETE FROM librosautores WHERE codLibro = ?");
+						query3.setInt(1, aux);
+						query3.execute();
+
 						PreparedStatement query2 = conexion.getConexion()
 								.prepareStatement("DELETE FROM ejemplares WHERE codLibro = ?");
 						query2.setInt(1, aux);
 						query2.execute();
-						PreparedStatement query3 = conexion.getConexion()
-								.prepareStatement("DELETE FROM liborsautores WHERE codLibro = ?");
-						query3.setInt(1, aux);
-						query3.execute();
 						cargarLibros();
 					} catch (SQLException e2) {
 						System.out.println(e2.getLocalizedMessage());
@@ -251,11 +252,20 @@ public class ListaLibrosController {
 			try {
 				Matcher mat = pattern.matcher(isbnText.getText());
 				if (mat.matches()) {
-					String sql = "INSERT INTO libros (nombreLibro, ISBN) VALUES (?,?)";
+					String sql = "INSERT INTO libros (nombreLibro, ISBN, fechaIntro) VALUES (?,?,?)";
 					PreparedStatement query = conexion.getConexion().prepareStatement(sql);
 					query.setString(1, nombreText.getText());
 					query.setString(2, isbnText.getText());
+
+					if (conexion.isConnected() == 1) {
+						query.setDate(3, null);
+					} else if (conexion.isConnected() == 2) {
+						java.util.Date aux = Calendar.getInstance().getTime();
+						Date sqlDate = new java.sql.Date(aux.getTime());
+						query.setDate(3, sqlDate);
+					}
 					query.execute();
+
 					cargarLibros();
 				} else {
 					Alert unvalidISBN = new Alert(AlertType.ERROR);
@@ -305,21 +315,19 @@ public class ListaLibrosController {
 					if (conexion.isConnected() == 1) {
 						listaLibros.getLibros()
 								.add(new Libro(resultado.getInt("codLibro"), resultado.getString("nombreLibro"),
-										resultado.getString("isbn"), resultado.getDate("fechaIntro").toLocalDate(),
+										resultado.getString("isbn"), resultado.getDate("fechaIntro"),
 										resultado.getInt("codEjemplar"), resultado.getDouble("importe"),
 										resultado.getString("nombreAutor"), resultado.getString("codAutor")));
 					} else {
 
-						LocalDate aux = resultado.getDate("fechaIntro").toLocalDate();
-						Date aux2 = resultado.getDate("fechaIntro");
 						listaLibros.getLibros()
 								.add(new Libro(resultado.getInt("codLibro"), resultado.getString("nombreLibro"),
-										resultado.getString("isbn"), aux, resultado.getInt("codEjemplar"),
-										resultado.getDouble("importe"), resultado.getString("nombreAutor"),
-										resultado.getString("codAutor")));
+										resultado.getString("isbn"), resultado.getDate("fechaIntro"),
+										resultado.getInt("codEjemplar"), resultado.getDouble("importe"),
+										resultado.getString("nombreAutor"), resultado.getString("codAutor")));
 					}
 				}
-			} catch (SQLException e) {
+			} catch (Exception e) {
 				System.err.println(e.getLocalizedMessage());
 				System.err.println("SQL EXCEPTION");
 			}

@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import aed.sql.model.Conexion;
 import aed.sql.view.MainView;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
@@ -24,71 +25,84 @@ public class MainController {
 		librosController = new ListaLibrosController();
 		conexion = new Conexion();
 
-		view.getConectarButton().setOnAction(e -> conectar());
+		view.getConDisconButton().setOnAction(e -> inicializarConexion(e));
+		view.getActualizarButton().setOnAction(e -> inicializarConexion(e));
 
 	}
 
-	private void conectar() {
+	private void inicializarConexion(ActionEvent e2) {
 
-		conexion.setRuta(view.getRutaBox().getValue());
-		conexion.setHost(view.getHostText().getText());
-		conexion.setPuerto(Integer.parseInt(view.getPuertoText().getText()));
-		conexion.setDb(view.getDbText().getText());
-		conexion.setUser(view.getUserText().getText());
-		conexion.setPassword(view.getPasswordField().getText());
+		if (view.getConDisconButton().isSelected()) {
 
-		conexion.conectar();
+			view.getCir().setImage(new Image("resources/green.png"));
+			conexion.setRuta(view.getRutaBox().getValue());
+			conexion.setHost(view.getHostText().getText());
+			conexion.setPuerto(Integer.parseInt(view.getPuertoText().getText()));
+			conexion.setDb(view.getDbText().getText());
+			conexion.setUser(view.getUserText().getText());
+			conexion.setPassword(view.getPasswordField().getText());
 
-		librosController = new ListaLibrosController();
-		librosController.setConexion(conexion);
+			conexion.conectar();
 
-		view.getLibrosTab().setContent(librosController.getView());
-		view.getActualizarButton().setOnAction(e -> librosController.cargarLibros());
+			librosController = new ListaLibrosController();
+			librosController.setConexion(conexion);
 
-		try {
+			view.getLibrosTab().setContent(librosController.getView());
 
-			switch (conexion.isConnected()) {
-			case 1:
-				app.setTitle("Conectado a: MySQL");
-				librosController.cargarLibros();
-				view.getCir().setImage(new Image("resources/green.png"));
-				break;
+			try {
 
-			case 2:
-				app.setTitle("Conectado a: ACCESS");
-				librosController.cargarLibros();
-				view.getCir().setImage(new Image("resources/green.png"));
-				break;
-			case 3:
-				app.setTitle("Conectado a: MySQL");
-				librosController.cargarLibros();
-				view.getCir().setImage(new Image("resources/green.png"));
-				break;
-			case 0:
-				Alert errorConnect = new Alert(AlertType.ERROR);
-				errorConnect.setHeaderText(null);
-				errorConnect.setContentText("Error al conectar con la base de datos: " + view.getDbText().getText());
-				errorConnect.show();
+				switch (conexion.isConnected()) {
+				case 1:
+					app.setTitle("Conectado a: MySQL");
+					librosController.cargarLibros();
+					view.getCir().setImage(new Image("resources/green.png"));
+					break;
 
-				librosController.getListaLibros().getLibros().clear();
+				case 2:
+					app.setTitle("Conectado a: ACCESS");
+					librosController.cargarLibros();
+					view.getCir().setImage(new Image("resources/green.png"));
+					break;
+				case 3:
+					app.setTitle("Conectado a: SQL Server");
+					librosController.cargarLibros();
+					view.getCir().setImage(new Image("resources/green.png"));
+					break;
+				case 0:
+					Alert errorConnect = new Alert(AlertType.ERROR);
+					errorConnect.setHeaderText(null);
+					errorConnect
+							.setContentText("Error al conectar con la base de datos: " + view.getDbText().getText());
+					errorConnect.show();
+
+					librosController.getListaLibros().getLibros().clear();
+					app.setTitle("-------");
+					view.getCir().setImage(new Image("resources/red.png"));
+					break;
+				}
+
+			} catch (NumberFormatException | NullPointerException e) {
+				e.printStackTrace();
+				Alert errorFormat = new Alert(AlertType.ERROR);
+				errorFormat.setTitle("Conexión SQL");
+				errorFormat.setHeaderText("Error al conectar");
+				errorFormat.setContentText("Complete los campos correctamente.");
+				errorFormat.show();
 				app.setTitle("-------");
 				view.getCir().setImage(new Image("resources/red.png"));
-				break;
+				try {
+					conexion.getConexion().close();
+				} catch (SQLException err) {
+					System.out.println("HEREE");
+				}
 			}
-
-		} catch (NumberFormatException | NullPointerException e) {
-			e.printStackTrace();
-			Alert errorFormat = new Alert(AlertType.ERROR);
-			errorFormat.setTitle("Conexión SQL");
-			errorFormat.setHeaderText("Error al conectar");
-			errorFormat.setContentText("Complete los campos correctamente.");
-			errorFormat.show();
-			app.setTitle("-------");
-			view.getCir().setImage(new Image("resources/red.png"));
+		} else {
 			try {
 				conexion.getConexion().close();
-			} catch (SQLException err) {
-				System.out.println("HEREE");
+				view.getCir().setImage(new Image("resources/red.png"));
+				view.getLibrosTab().setContent(null);
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
 		}
 

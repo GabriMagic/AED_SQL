@@ -8,6 +8,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -17,11 +18,11 @@ public class MainView extends BorderPane {
 	private Tab librosTab, insertTab;
 	private ToolBar toolBar;
 
-	private Button conectarButton, actualizarButton;
+	private Button actualizarButton;
 	private TextField hostText, puertoText, dbText, userText;
 	private PasswordField passwordField;
 	private ComboBox<String> rutaBox;
-
+	private ToggleButton conDisconButton;
 	private ImageView cir;
 
 	private ArrayList<String> optionList;
@@ -39,8 +40,7 @@ public class MainView extends BorderPane {
 		optionList.add("jdbc:ucanaccess:");
 		optionList.add("jdbc:sqlserver:");
 
-		conectarButton = new Button("Conectar");
-		conectarButton.setDefaultButton(true);
+		conDisconButton = new ToggleButton("", cir);
 
 		actualizarButton = new Button("Actualizar");
 
@@ -63,8 +63,8 @@ public class MainView extends BorderPane {
 		passwordField = new PasswordField();
 		passwordField.setPromptText("Contraseña...");
 
-		toolBar.getItems().addAll(rutaBox, hostText, puertoText, dbText, userText, passwordField, conectarButton,
-				actualizarButton, cir);
+		toolBar.getItems().addAll(rutaBox, hostText, puertoText, dbText, userText, passwordField, conDisconButton,
+				actualizarButton);
 
 		librosTab = new Tab("Libros");
 		librosTab.setClosable(false);
@@ -81,10 +81,6 @@ public class MainView extends BorderPane {
 
 	public ToolBar getToolBar() {
 		return toolBar;
-	}
-
-	public Button getConectarButton() {
-		return conectarButton;
 	}
 
 	public TextField getHostText() {
@@ -130,6 +126,9 @@ public class MainView extends BorderPane {
 	public Tab getInsertTab() {
 		return insertTab;
 	}
-	
+
+	public ToggleButton getConDisconButton() {
+		return conDisconButton;
+	}
 
 }

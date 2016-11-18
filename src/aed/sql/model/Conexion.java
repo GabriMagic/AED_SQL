@@ -22,21 +22,10 @@ public class Conexion {
 		case "jdbc:mysql:":
 			try {
 				link = ruta + "//" + host + ":" + puerto + "/" + db;
+				System.out.println(link);
 				this.conexion = DriverManager.getConnection(link, user, password);
 				connected = 1;
 			} catch (SQLException e) {
-				connected = 0;
-			}
-			break;
-
-		case "jdbc:sqlserver:":
-			try {
-				Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-				link = ruta + "//" + host + ";" + "DataBaseName=" + db;
-				this.conexion = DriverManager.getConnection(link, user, password);
-				connected = 2;
-			} catch (SQLException | ClassNotFoundException e) {
-				e.printStackTrace();
 				connected = 0;
 			}
 			break;
@@ -44,12 +33,24 @@ public class Conexion {
 			try {
 				Class.forName("org.hsqldb.jdbcDriver");
 				this.conexion = DriverManager.getConnection(ruta + "//" + host);
+				connected = 2;
+			} catch (SQLException | ClassNotFoundException e) {
+				e.printStackTrace();
+				connected = 0;
+			}
+			break;
+		case "jdbc:sqlserver:":
+			try {
+				Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+				link = ruta + "//" + host + ";" + "DataBaseName=" + db;
+				this.conexion = DriverManager.getConnection(link, user, password);
 				connected = 3;
 			} catch (SQLException | ClassNotFoundException e) {
 				e.printStackTrace();
 				connected = 0;
 			}
 			break;
+
 		}
 		return connected;
 	}

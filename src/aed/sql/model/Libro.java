@@ -1,6 +1,6 @@
 package aed.sql.model;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -14,10 +14,10 @@ public class Libro {
 
 	private IntegerProperty codLibro, codEjemplar;
 	private SimpleStringProperty nombre, isbn, autor, codAutor;
-	private ObjectProperty<LocalDate> fechaIntro;
+	private ObjectProperty<Date> fechaIntro;
 	private DoubleProperty importe;
 
-	public Libro(Integer cod, String nombre, String isbn, LocalDate fechaIntro, Integer codEjemplar, Double importe,
+	public Libro(Integer cod, String nombre, String isbn, Date fechaIntro, Integer codEjemplar, Double importe,
 			String autor, String codAutor) {
 		this.codLibro = new SimpleIntegerProperty(this, "cod", cod);
 		this.nombre = new SimpleStringProperty(this, "nombre", nombre);
@@ -98,15 +98,15 @@ public class Libro {
 		this.autorProperty().set(autor);
 	}
 
-	public ObjectProperty<LocalDate> fechaIntroProperty() {
+	public ObjectProperty<Date> fechaIntroProperty() {
 		return this.fechaIntro;
 	}
 
-	public LocalDate getFechaIntro() {
+	public Date getFechaIntro() {
 		return this.fechaIntroProperty().get();
 	}
 
-	public void setFechaIntro(final LocalDate fechaIntro) {
+	public void setFechaIntro(final Date fechaIntro) {
 		this.fechaIntroProperty().set(fechaIntro);
 	}
 
