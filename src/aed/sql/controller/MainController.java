@@ -35,6 +35,8 @@ public class MainController {
 		if (view.getConDisconButton().isSelected()) {
 
 			view.getCir().setImage(new Image("resources/green.png"));
+			view.getActualizarButton().setDisable(false);
+
 			conexion.setRuta(view.getRutaBox().getValue());
 			conexion.setHost(view.getHostText().getText());
 			conexion.setPuerto(Integer.parseInt(view.getPuertoText().getText()));
@@ -55,17 +57,20 @@ public class MainController {
 				case 1:
 					app.setTitle("Conectado a: MySQL");
 					librosController.cargarLibros();
+					librosController.getView().getAddAutor().setDisable(false);
 					view.getCir().setImage(new Image("resources/green.png"));
 					break;
 
 				case 2:
 					app.setTitle("Conectado a: ACCESS");
 					librosController.cargarLibros();
+					librosController.getView().getAddAutor().setDisable(true);
 					view.getCir().setImage(new Image("resources/green.png"));
 					break;
 				case 3:
 					app.setTitle("Conectado a: SQL Server");
 					librosController.cargarLibros();
+					librosController.getView().getAddAutor().setDisable(false);
 					view.getCir().setImage(new Image("resources/green.png"));
 					break;
 				case 0:
@@ -100,6 +105,7 @@ public class MainController {
 			try {
 				conexion.getConexion().close();
 				view.getCir().setImage(new Image("resources/red.png"));
+				view.getActualizarButton().setDisable(true);
 				view.getLibrosTab().setContent(null);
 			} catch (SQLException e) {
 				e.printStackTrace();

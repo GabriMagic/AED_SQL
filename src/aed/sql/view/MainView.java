@@ -43,6 +43,7 @@ public class MainView extends BorderPane {
 		conDisconButton = new ToggleButton("", cir);
 
 		actualizarButton = new Button("Actualizar");
+		actualizarButton.setDisable(true);
 
 		rutaBox = new ComboBox<>();
 		rutaBox.setItems(FXCollections.observableArrayList(optionList));
@@ -63,8 +64,8 @@ public class MainView extends BorderPane {
 		passwordField = new PasswordField();
 		passwordField.setPromptText("Contraseña...");
 
-		toolBar.getItems().addAll(rutaBox, hostText, puertoText, dbText, userText, passwordField, conDisconButton,
-				actualizarButton);
+		toolBar.getItems().addAll(rutaBox, hostText, puertoText, dbText, userText, passwordField, actualizarButton,
+				conDisconButton);
 
 		librosTab = new Tab("Libros");
 		librosTab.setClosable(false);

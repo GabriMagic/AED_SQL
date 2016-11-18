@@ -22,7 +22,6 @@ public class Conexion {
 		case "jdbc:mysql:":
 			try {
 				link = ruta + "//" + host + ":" + puerto + "/" + db;
-				System.out.println(link);
 				this.conexion = DriverManager.getConnection(link, user, password);
 				connected = 1;
 			} catch (SQLException e) {
