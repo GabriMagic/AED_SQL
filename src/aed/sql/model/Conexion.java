@@ -10,22 +10,22 @@ public class Conexion {
 
 	private String ruta, host, db, user, password, link;
 	private int puerto;
-	private boolean connected;
+	private int connected;
 
 	public Conexion() {
 
 	}
 
-	public boolean conectar() {
+	public int conectar() {
 
 		switch (ruta) {
 		case "jdbc:mysql:":
 			try {
 				link = ruta + "//" + host + ":" + puerto + "/" + db;
 				this.conexion = DriverManager.getConnection(link, user, password);
-				connected = true;
+				connected = 1;
 			} catch (SQLException e) {
-				connected = false;
+				connected = 0;
 			}
 			break;
 
@@ -34,20 +34,20 @@ public class Conexion {
 				Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 				link = ruta + "//" + host + ";" + "DataBaseName=" + db;
 				this.conexion = DriverManager.getConnection(link, user, password);
-				connected = true;
+				connected = 2;
 			} catch (SQLException | ClassNotFoundException e) {
 				e.printStackTrace();
-				connected = false;
+				connected = 0;
 			}
 			break;
 		case "jdbc:ucanaccess:":
 			try {
 				Class.forName("org.hsqldb.jdbcDriver");
 				this.conexion = DriverManager.getConnection(ruta + "//" + host);
-				connected = true;
+				connected = 3;
 			} catch (SQLException | ClassNotFoundException e) {
 				e.printStackTrace();
-				connected = false;
+				connected = 0;
 			}
 			break;
 		}
@@ -106,12 +106,8 @@ public class Conexion {
 		this.link = link;
 	}
 
-	public boolean isConnected() {
+	public int isConnected() {
 		return connected;
-	}
-
-	public void setConnected(boolean connected) {
-		this.connected = connected;
 	}
 
 	public int getPuerto() {

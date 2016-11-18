@@ -2,10 +2,12 @@ package aed.sql.controller;
 
 import java.io.IOException;
 import java.sql.CallableStatement;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -188,7 +190,7 @@ public class ListaLibrosController {
 	}
 
 	private void onAddButtonAction(ActionEvent e) {
-		if (conexion.isConnected()) {
+		if (conexion.isConnected() > 0) {
 			insertStage.getScene().setRoot(insertLibroView);
 			insertStage.show();
 		} else {
@@ -202,7 +204,7 @@ public class ListaLibrosController {
 
 	private void onEliminarButtonAction(ActionEvent e) {
 		int aux = view.getLibrosTable().getSelectionModel().getSelectedItem().getCodLibro();
-		if (conexion.isConnected()) {
+		if (conexion.isConnected() > 0) {
 			try {
 				Alert eliminarConfirm = new Alert(AlertType.CONFIRMATION);
 				eliminarConfirm.setTitle("Atención!");
@@ -211,9 +213,10 @@ public class ListaLibrosController {
 				Optional<ButtonType> answer = eliminarConfirm.showAndWait();
 				if (answer.get() == ButtonType.OK) {
 					PreparedStatement query = conexion.getConexion()
-							.prepareStatement("DELETE FROM ejemplares WHERE codLibro = ?");
+							.prepareStatement("DELETE FROM libros WHERE codLibro = ?");
 					query.setInt(1, aux);
 					query.execute();
+
 					cargarLibros();
 				}
 			} catch (SQLException e1) {
@@ -225,10 +228,13 @@ public class ListaLibrosController {
 				if (answer.get() == ButtonType.OK) {
 					try {
 						PreparedStatement query2 = conexion.getConexion()
-								.prepareStatement("DELETE FROM librosautores WHERE codLibro = ?");
-						System.out.println(aux);
+								.prepareStatement("DELETE FROM ejemplares WHERE codLibro = ?");
 						query2.setInt(1, aux);
 						query2.execute();
+						PreparedStatement query3 = conexion.getConexion()
+								.prepareStatement("DELETE FROM liborsautores WHERE codLibro = ?");
+						query3.setInt(1, aux);
+						query3.execute();
 						cargarLibros();
 					} catch (SQLException e2) {
 						System.out.println(e2.getLocalizedMessage());
@@ -241,7 +247,7 @@ public class ListaLibrosController {
 
 	@FXML
 	void onAddLibroButton(ActionEvent event) {
-		if (conexion.isConnected())
+		if (conexion.isConnected() > 0)
 			try {
 				Matcher mat = pattern.matcher(isbnText.getText());
 				if (mat.matches()) {
@@ -259,6 +265,7 @@ public class ListaLibrosController {
 					unvalidISBN.show();
 				}
 			} catch (NullPointerException | SQLException e2) {
+				System.err.println(e2.getLocalizedMessage());
 				Alert errorCon = new Alert(AlertType.ERROR);
 				errorCon.setTitle("Error de conexión");
 				errorCon.setHeaderText("Error al conectar");
@@ -281,7 +288,7 @@ public class ListaLibrosController {
 		listaLibros.librosProperty().clear();
 		view.getLibrosTable().setItems(listaLibros.librosProperty());
 
-		if (conexion.isConnected()) {
+		if (conexion.isConnected() > 0) {
 			try {
 
 				String query = "SELECT lb.codLibro, nombreLibro, ISBN, fechaIntro, codEjemplar, importe, nombreAutor, au.codAutor FROM libros as lb "
@@ -295,11 +302,22 @@ public class ListaLibrosController {
 
 				while (resultado.next()) {
 
-					listaLibros.getLibros()
-							.add(new Libro(resultado.getInt("codLibro"), resultado.getString("nombreLibro"),
-									resultado.getString("isbn"), resultado.getDate("fechaIntro").toLocalDate(),
-									resultado.getInt("codEjemplar"), resultado.getDouble("importe"),
-									resultado.getString("nombreAutor"), resultado.getString("codAutor")));
+					if (conexion.isConnected() == 1) {
+						listaLibros.getLibros()
+								.add(new Libro(resultado.getInt("codLibro"), resultado.getString("nombreLibro"),
+										resultado.getString("isbn"), resultado.getDate("fechaIntro").toLocalDate(),
+										resultado.getInt("codEjemplar"), resultado.getDouble("importe"),
+										resultado.getString("nombreAutor"), resultado.getString("codAutor")));
+					} else {
+
+						LocalDate aux = resultado.getDate("fechaIntro").toLocalDate();
+						Date aux2 = resultado.getDate("fechaIntro");
+						listaLibros.getLibros()
+								.add(new Libro(resultado.getInt("codLibro"), resultado.getString("nombreLibro"),
+										resultado.getString("isbn"), aux, resultado.getInt("codEjemplar"),
+										resultado.getDouble("importe"), resultado.getString("nombreAutor"),
+										resultado.getString("codAutor")));
+					}
 				}
 			} catch (SQLException e) {
 				System.err.println(e.getLocalizedMessage());

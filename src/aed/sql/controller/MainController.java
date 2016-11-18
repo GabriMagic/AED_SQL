@@ -47,14 +47,24 @@ public class MainController {
 
 		try {
 
-			if (conexion.isConnected()) {
-
+			switch (conexion.isConnected()) {
+			case 1:
 				app.setTitle("Conectado a: MySQL");
 				librosController.cargarLibros();
 				view.getCir().setImage(new Image("resources/green.png"));
+				break;
 
-			} else {
-
+			case 2:
+				app.setTitle("Conectado a: ACCESS");
+				librosController.cargarLibros();
+				view.getCir().setImage(new Image("resources/green.png"));
+				break;
+			case 3:
+				app.setTitle("Conectado a: MySQL");
+				librosController.cargarLibros();
+				view.getCir().setImage(new Image("resources/green.png"));
+				break;
+			case 0:
 				Alert errorConnect = new Alert(AlertType.ERROR);
 				errorConnect.setHeaderText(null);
 				errorConnect.setContentText("Error al conectar con la base de datos: " + view.getDbText().getText());
@@ -63,7 +73,7 @@ public class MainController {
 				librosController.getListaLibros().getLibros().clear();
 				app.setTitle("-------");
 				view.getCir().setImage(new Image("resources/red.png"));
-
+				break;
 			}
 
 		} catch (NumberFormatException | NullPointerException e) {
