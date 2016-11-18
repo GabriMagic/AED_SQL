@@ -26,7 +26,6 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.converter.IntegerStringConverter;
 
 public class ListaLibrosController {
 
@@ -55,7 +54,6 @@ public class ListaLibrosController {
 		this.conexion = conexion;
 
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/aed/sql/view/insertLibroView.fxml"));
-
 		loader.setController(this);
 		try {
 			insertLibroView = loader.load();
@@ -66,8 +64,6 @@ public class ListaLibrosController {
 
 		conexion.conectar();
 
-		
-		 
 		listaLibros = new ListaLibros();
 
 		insertStage = new Stage();
@@ -77,9 +73,7 @@ public class ListaLibrosController {
 		insertStage.setScene(new Scene(insertLibroView));
 
 		view.getNombreLibroColumn().setCellFactory(TextFieldTableCell.forTableColumn());
-		view.getCodLibroColumn().setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
 		view.getIsbnLibroColumn().setCellFactory(TextFieldTableCell.forTableColumn());
-		view.getEjemplarColumn().setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
 
 		view.getNombreLibroColumn().setOnEditCommit(e -> updateNombreLibro(e));
 		view.getIsbnLibroColumn().setOnEditCommit(e -> updateIsbnLibro(e));

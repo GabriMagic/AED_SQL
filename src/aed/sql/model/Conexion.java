@@ -28,13 +28,32 @@ public class Conexion {
 
 	public boolean conectar() {
 
-		try {
-			link = ruta + "//" + host + ":" + puerto + "/" + db;
-			conexion = DriverManager.getConnection(link, user, password);
-			connected = true;
-		} catch (SQLException e) {
-			connected = false;
+		System.out.println(ruta);
+
+		switch (ruta) {
+		case "jdbc:mysql:":
+			try {
+				link = ruta + "//" + host + ":" + puerto + "/" + db;
+				conexion = DriverManager.getConnection(link, user, password);
+				connected = true;
+			} catch (SQLException e) {
+				connected = false;
+			}
+			break;
+
+		case "jdbc:sqlserver:":
+			try {
+				Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+				link = ruta + "//" + host + ";" + "DataBaseName=" + db;
+				conexion = DriverManager.getConnection(link, user, password);
+				connected = true;
+			} catch (SQLException | ClassNotFoundException e) {
+				e.printStackTrace();
+				connected = false;
+			}
+			break;
 		}
+
 		return connected;
 	}
 

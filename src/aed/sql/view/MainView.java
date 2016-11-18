@@ -36,7 +36,7 @@ public class MainView extends BorderPane {
 
 		optionList = new ArrayList<>();
 		optionList.add("jdbc:mysql:");
-		optionList.add("jdbc:ucanaccess:");
+		optionList.add("jdbc:sqlserver:");
 
 		conectarButton = new Button("Conectar");
 		conectarButton.setDefaultButton(true);
@@ -67,7 +67,7 @@ public class MainView extends BorderPane {
 
 		librosTab = new Tab("Libros");
 		librosTab.setClosable(false);
-		insertTab = new Tab("XXX");
+		insertTab = new Tab("Autores");
 		insertTab.setClosable(false);
 
 		TabPane tabPane = new TabPane();

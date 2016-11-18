@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane fx:id="autorView" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.60">
+   <children>
+      <TableView fx:id="autoresTabel" prefHeight="200.0" prefWidth="200.0">
+        <columns>
+          <TableColumn fx:id="codAutorColumn" prefWidth="95.0" text="Código Autor" />
+          <TableColumn fx:id="nombreAutor" prefWidth="104.0" text="Nombre Autor" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

@@ -22,8 +22,9 @@ public class MainController {
 
 		app = primaryStage;
 
-		conexion = new Conexion();
-		conexion.conectar();
+		conexion = new Conexion(view.getRutaBox().getValue(), view.getHostText().getText(),
+				Integer.parseInt(view.getPuertoText().getText()), view.getDbText().getText(),
+				view.getUserText().getText(), view.getPasswordField().getText());
 
 		librosController = new ListaLibrosController(conexion);
 
@@ -35,17 +36,13 @@ public class MainController {
 
 	private void bindVistas() {
 		view.getLibrosTab().setContent(librosController.getView());
-
 	}
 
 	private void conectar() {
 
-		conexion.setRuta(view.getRutaBox().getValue());
-		conexion.setHost(view.getHostText().getText());
-		conexion.setPuerto(Integer.parseInt(view.getPuertoText().getText()));
-		conexion.setDb(view.getDbText().getText());
-		conexion.setUser(view.getUserText().getText());
-		conexion.setPassword(view.getPasswordField().getText());
+		conexion = new Conexion(view.getRutaBox().getValue(), view.getHostText().getText(),
+				Integer.parseInt(view.getPuertoText().getText()), view.getDbText().getText(),
+				view.getUserText().getText(), view.getPasswordField().getText());
 
 		try {
 
@@ -57,6 +54,9 @@ public class MainController {
 				view.getCir().setImage(new Image("resources/green.png"));
 
 			} else {
+				
+				System.out.println(conexion.conectar());
+				
 				Alert errorConnect = new Alert(AlertType.ERROR);
 				errorConnect.setHeaderText(null);
 				errorConnect.setContentText("Error al conectar con la base de datos: " + view.getDbText().getText());
@@ -65,14 +65,11 @@ public class MainController {
 				librosController.getListaLibros().getLibros().clear();
 				app.setTitle("-------");
 				view.getCir().setImage(new Image("resources/red.png"));
-				try {
-					conexion.getConexion().close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+
 			}
 
 		} catch (NumberFormatException | NullPointerException e) {
+			e.printStackTrace();
 			Alert errorFormat = new Alert(AlertType.ERROR);
 			errorFormat.setTitle("Conexión SQL");
 			errorFormat.setHeaderText("Error al conectar");

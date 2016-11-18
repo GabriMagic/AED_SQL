@@ -14,5 +14,6 @@
 	<classpathentry kind="lib" path="lib/jackcess-2.1.3.jar"/>
 	<classpathentry kind="lib" path="lib/ucanaccess-3.0.7.jar"/>
 	<classpathentry kind="lib" path="lib/jackcess-encrypt-2.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/sqljdbc4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
