@@ -21,24 +21,14 @@ public class MainController {
 		view = new MainView();
 
 		app = primaryStage;
-
+		librosController = new ListaLibrosController();
 		conexion = new Conexion();
-
-		// conexion = new Conexion(view.getRutaBox().getValue(),
-		// view.getHostText().getText(),
-		// Integer.parseInt(view.getPuertoText().getText()),
-		// view.getDbText().getText(),
-		// view.getUserText().getText(), view.getPasswordField().getText());
 
 		view.getConectarButton().setOnAction(e -> conectar());
 
-//		view.getLibrosTab().setContent(librosController.getView());
-		view.getActualizarButton().setOnAction(e -> librosController.cargarLibros());
 	}
 
 	private void conectar() {
-
-		System.out.println(view.getPuertoText().getText());
 
 		conexion.setRuta(view.getRutaBox().getValue());
 		conexion.setHost(view.getHostText().getText());
@@ -47,20 +37,23 @@ public class MainController {
 		conexion.setUser(view.getUserText().getText());
 		conexion.setPassword(view.getPasswordField().getText());
 
+		conexion.conectar();
+
 		librosController = new ListaLibrosController();
+		librosController.setConexion(conexion);
+
+		view.getLibrosTab().setContent(librosController.getView());
+		view.getActualizarButton().setOnAction(e -> librosController.cargarLibros());
 
 		try {
 
 			if (conexion.isConnected()) {
 
 				app.setTitle("Conectado a: MySQL");
-				// if (conexion.isConnected())
 				librosController.cargarLibros();
 				view.getCir().setImage(new Image("resources/green.png"));
 
 			} else {
-
-				System.out.println(conexion.isConnected());
 
 				Alert errorConnect = new Alert(AlertType.ERROR);
 				errorConnect.setHeaderText(null);

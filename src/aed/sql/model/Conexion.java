@@ -8,7 +8,7 @@ public class Conexion {
 
 	private Connection conexion;
 
-	private String ruta, host, db, user, password, link = "";
+	private String ruta, host, db, user, password, link;
 	private int puerto;
 	private boolean connected;
 
@@ -16,17 +16,8 @@ public class Conexion {
 
 	}
 
-	// public Conexion(String ruta, String host, int puerto, String db, String
-	// user, String password) {
-	// this.ruta = ruta;
-	// this.host = host;
-	// this.puerto = puerto;
-	// this.db = db;
-	// this.user = user;
-	// this.password = password;
-	// }
-
-	public boolean conectar(String ruta, String host, int puerto, String db, String user, String password) {
+	public boolean conectar() {
+		System.out.println(link);
 
 		switch (ruta) {
 		case "jdbc:mysql:":

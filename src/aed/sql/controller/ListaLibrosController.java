@@ -73,7 +73,7 @@ public class ListaLibrosController {
 
 	public ListaLibrosController() {
 
-		conexion = new Conexion();
+		view = new ListaLibrosView();
 
 		FXMLLoader loaderLibros = new FXMLLoader(getClass().getResource("/aed/sql/view/insertLibroView.fxml"));
 		loaderLibros.setController(this);
@@ -90,10 +90,6 @@ public class ListaLibrosController {
 		}
 
 		pattern = Pattern.compile("[0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]-[a-zA-Z]");
-
-		view = new ListaLibrosView();
-
-		// conexion.conectar();
 
 		listaLibros = new ListaLibros();
 
@@ -115,7 +111,6 @@ public class ListaLibrosController {
 
 		addAutorButton.setOnAction(e -> onConfirmAddAutor(e));
 		cancelAutorButton.setOnAction(e -> insertStage.close());
-
 	}
 
 	private void onConfirmAddAutor(ActionEvent e) {
@@ -128,6 +123,7 @@ public class ListaLibrosController {
 			cargarLibros();
 			insertStage.close();
 		} catch (SQLException e1) {
+			System.out.println(e1.getLocalizedMessage());
 			Alert duplicateKey = new Alert(AlertType.ERROR);
 			duplicateKey.setTitle("Error al añadir el autor");
 			duplicateKey.setHeaderText(null);
@@ -193,6 +189,7 @@ public class ListaLibrosController {
 
 	private void onAddButtonAction(ActionEvent e) {
 		if (conexion.isConnected()) {
+			insertStage.getScene().setRoot(insertLibroView);
 			insertStage.show();
 		} else {
 			Alert errorCon = new Alert(AlertType.ERROR);
@@ -214,7 +211,7 @@ public class ListaLibrosController {
 				Optional<ButtonType> answer = eliminarConfirm.showAndWait();
 				if (answer.get() == ButtonType.OK) {
 					PreparedStatement query = conexion.getConexion()
-							.prepareStatement("DELETE FROM libros WHERE codLibro = ?");
+							.prepareStatement("DELETE FROM ejemplares WHERE codLibro = ?");
 					query.setInt(1, aux);
 					query.execute();
 					cargarLibros();
@@ -314,6 +311,10 @@ public class ListaLibrosController {
 
 	public ListaLibrosView getView() {
 		return view;
+	}
+
+	public void setConexion(Conexion conexion) {
+		this.conexion = conexion;
 	}
 
 	public ListaLibros getListaLibros() {

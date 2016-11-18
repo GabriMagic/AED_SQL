@@ -51,13 +51,13 @@ public class MainView extends BorderPane {
 		hostText = new TextField();
 		hostText.setPromptText("Host...");
 
-		puertoText = new TextField();
+		puertoText = new TextField("3306");
 		puertoText.setPromptText("Puerto...");
 
-		userText = new TextField();
+		userText = new TextField("root");
 		userText.setPromptText("Usuario...");
 
-		dbText = new TextField();
+		dbText = new TextField("bdbiblioteca");
 		dbText.setPromptText("Base de datos...");
 
 		passwordField = new PasswordField();
