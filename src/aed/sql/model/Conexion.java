@@ -28,8 +28,6 @@ public class Conexion {
 
 	public boolean conectar() {
 
-		System.out.println(ruta);
-
 		switch (ruta) {
 		case "jdbc:mysql:":
 			try {

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import aed.sql.model.Libro;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -17,15 +18,16 @@ public class ListaLibrosView extends BorderPane {
 	private TableColumn<Libro, Integer> codLibroColumn, ejemplarColumn;
 	private TableColumn<Libro, Double> importeColumn;
 	private ContextMenu contextMenu;
-	private MenuItem eliminarMenu, addLibroMenu;
+	private MenuItem eliminarMenu, addLibroMenu, addAutor;
 
 	public ListaLibrosView() {
 
 		eliminarMenu = new MenuItem("Eliminar");
 		addLibroMenu = new MenuItem("Añadir libro");
+		addAutor = new MenuItem("Añadir autor");
 
 		contextMenu = new ContextMenu();
-		contextMenu.getItems().addAll(addLibroMenu, eliminarMenu);
+		contextMenu.getItems().addAll(addLibroMenu, eliminarMenu, new SeparatorMenuItem(), addAutor);
 
 		librosTable = new TableView<>();
 		librosTable.setEditable(true);
@@ -111,6 +113,10 @@ public class ListaLibrosView extends BorderPane {
 
 	public MenuItem getAddLibroMenu() {
 		return addLibroMenu;
+	}
+
+	public MenuItem getAddAutor() {
+		return addAutor;
 	}
 
 }

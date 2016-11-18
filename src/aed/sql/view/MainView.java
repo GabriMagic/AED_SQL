@@ -129,5 +129,6 @@ public class MainView extends BorderPane {
 	public Tab getInsertTab() {
 		return insertTab;
 	}
+	
 
 }

@@ -12,6 +12,8 @@ import aed.sql.model.Conexion;
 import aed.sql.model.Libro;
 import aed.sql.model.ListaLibros;
 import aed.sql.view.ListaLibrosView;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,6 +22,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -44,6 +48,21 @@ public class ListaLibrosController {
 	@FXML
 	private Button cancelButton;
 
+	@FXML
+	private GridPane addAutorView;
+
+	@FXML
+	private ComboBox<String> autoresCombo;
+
+	@FXML
+	private Label labelText;
+
+	@FXML
+	private Button addAutorButton;
+
+	@FXML
+	private Button cancelAutorButton;
+
 	private ListaLibrosView view;
 	private ListaLibros listaLibros;
 	private Conexion conexion;
@@ -53,10 +72,17 @@ public class ListaLibrosController {
 
 		this.conexion = conexion;
 
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/aed/sql/view/insertLibroView.fxml"));
-		loader.setController(this);
+		FXMLLoader loaderLibros = new FXMLLoader(getClass().getResource("/aed/sql/view/insertLibroView.fxml"));
+		loaderLibros.setController(this);
 		try {
-			insertLibroView = loader.load();
+			insertLibroView = loaderLibros.load();
+		} catch (IOException e1) {
+		}
+
+		FXMLLoader loaderAutores = new FXMLLoader(getClass().getResource("/aed/sql/view/AddAutorView.fxml"));
+		loaderAutores.setController(this);
+		try {
+			addAutorView = loaderAutores.load();
 		} catch (IOException e1) {
 		}
 
@@ -80,6 +106,41 @@ public class ListaLibrosController {
 
 		view.getEliminarMenu().setOnAction(e -> onEliminarButtonAction(e));
 		view.getAddLibroMenu().setOnAction(e -> onAddButtonAction(e));
+		view.getAddAutor().setOnAction(e -> onAddAutor(e));
+		
+		addAutorButton.setOnAction(e -> onConfirmAddAutor(e));
+
+	}
+
+	private void onConfirmAddAutor(ActionEvent e) {
+		
+		
+		
+	}
+
+	private void onAddAutor(ActionEvent e) {
+
+		ObservableList<String> autores = FXCollections.observableArrayList();
+
+		try {
+			PreparedStatement sql = conexion.getConexion().prepareStatement("SELECT * FROM autores");
+			ResultSet result = sql.executeQuery();
+
+			while (result.next()) {
+				autores.add(result.getString("nombreAutor"));
+			}
+
+			autoresCombo.setItems(autores);
+
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
+		labelText.setText(
+				"Añadir autor al libro: " + view.getLibrosTable().getSelectionModel().getSelectedItem().getNombre());
+		insertStage.getScene().setRoot(addAutorView);
+		insertStage.setTitle("Añadir autor");
+		insertStage.show();
 
 	}
 
@@ -228,9 +289,10 @@ public class ListaLibrosController {
 				while (resultado.next()) {
 
 					listaLibros.getLibros()
-							.add(new Libro(resultado.getInt(1), resultado.getString(2), resultado.getString(3),
-									resultado.getDate(4).toLocalDate(), resultado.getInt(5), resultado.getDouble(6),
-									resultado.getString(7), resultado.getString(8)));
+							.add(new Libro(resultado.getInt("codLibro"), resultado.getString("nombreLibro"),
+									resultado.getString("isbn"), resultado.getDate("fechaIntro").toLocalDate(),
+									resultado.getInt("codEjemplar"), resultado.getDouble("importe"),
+									resultado.getString("nombreAutor"), resultado.getString("codAutor")));
 				}
 			} catch (SQLException e) {
 				System.err.println(e.getLocalizedMessage());
