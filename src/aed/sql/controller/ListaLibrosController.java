@@ -71,9 +71,9 @@ public class ListaLibrosController {
 	private Stage insertStage;
 	private Pattern pattern;
 
-	public ListaLibrosController(Conexion conexion) {
+	public ListaLibrosController() {
 
-		this.conexion = conexion;
+		conexion = new Conexion();
 
 		FXMLLoader loaderLibros = new FXMLLoader(getClass().getResource("/aed/sql/view/insertLibroView.fxml"));
 		loaderLibros.setController(this);
@@ -93,7 +93,7 @@ public class ListaLibrosController {
 
 		view = new ListaLibrosView();
 
-		conexion.conectar();
+		// conexion.conectar();
 
 		listaLibros = new ListaLibros();
 
@@ -183,7 +183,6 @@ public class ListaLibrosController {
 		try {
 			PreparedStatement updateNombreLibro = conexion.getConexion()
 					.prepareStatement("UPDATE libros SET nombreLibro = ? WHERE codLibro = ?");
-
 			updateNombreLibro.setInt(2, view.getLibrosTable().getSelectionModel().getSelectedItem().getCodLibro());
 			updateNombreLibro.setString(1, e.getNewValue());
 			updateNombreLibro.executeUpdate();
@@ -206,7 +205,7 @@ public class ListaLibrosController {
 
 	private void onEliminarButtonAction(ActionEvent e) {
 		int aux = view.getLibrosTable().getSelectionModel().getSelectedItem().getCodLibro();
-		if (conexion.conectar()) {
+		if (conexion.isConnected()) {
 			try {
 				Alert eliminarConfirm = new Alert(AlertType.CONFIRMATION);
 				eliminarConfirm.setTitle("Atención!");
@@ -245,19 +244,15 @@ public class ListaLibrosController {
 
 	@FXML
 	void onAddLibroButton(ActionEvent event) {
-
-		if (conexion.conectar())
+		if (conexion.isConnected())
 			try {
 				Matcher mat = pattern.matcher(isbnText.getText());
 				if (mat.matches()) {
 					String sql = "INSERT INTO libros (nombreLibro, ISBN) VALUES (?,?)";
 					PreparedStatement query = conexion.getConexion().prepareStatement(sql);
-
 					query.setString(1, nombreText.getText());
 					query.setString(2, isbnText.getText());
-
 					query.execute();
-
 					cargarLibros();
 				} else {
 					Alert unvalidISBN = new Alert(AlertType.ERROR);
@@ -289,7 +284,7 @@ public class ListaLibrosController {
 		listaLibros.librosProperty().clear();
 		view.getLibrosTable().setItems(listaLibros.librosProperty());
 
-		if (conexion.conectar()) {
+		if (conexion.isConnected()) {
 			try {
 
 				String query = "SELECT lb.codLibro, nombreLibro, ISBN, fechaIntro, codEjemplar, importe, nombreAutor, au.codAutor FROM libros as lb "

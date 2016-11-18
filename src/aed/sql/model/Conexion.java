@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Conexion {
+
 	private Connection conexion;
 
 	private String ruta, host, db, user, password, link = "";
@@ -15,22 +16,23 @@ public class Conexion {
 
 	}
 
-	public Conexion(String ruta, String host, int puerto, String db, String user, String password) {
-		this.ruta = ruta;
-		this.host = host;
-		this.puerto = puerto;
-		this.db = db;
-		this.user = user;
-		this.password = password;
-	}
+	// public Conexion(String ruta, String host, int puerto, String db, String
+	// user, String password) {
+	// this.ruta = ruta;
+	// this.host = host;
+	// this.puerto = puerto;
+	// this.db = db;
+	// this.user = user;
+	// this.password = password;
+	// }
 
-	public boolean conectar() {
+	public boolean conectar(String ruta, String host, int puerto, String db, String user, String password) {
 
 		switch (ruta) {
 		case "jdbc:mysql:":
 			try {
 				link = ruta + "//" + host + ":" + puerto + "/" + db;
-				conexion = DriverManager.getConnection(link, user, password);
+				this.conexion = DriverManager.getConnection(link, user, password);
 				connected = true;
 			} catch (SQLException e) {
 				connected = false;
@@ -41,7 +43,7 @@ public class Conexion {
 			try {
 				Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 				link = ruta + "//" + host + ";" + "DataBaseName=" + db;
-				conexion = DriverManager.getConnection(link, user, password);
+				this.conexion = DriverManager.getConnection(link, user, password);
 				connected = true;
 			} catch (SQLException | ClassNotFoundException e) {
 				e.printStackTrace();
@@ -51,7 +53,7 @@ public class Conexion {
 		case "jdbc:ucanaccess:":
 			try {
 				Class.forName("org.hsqldb.jdbcDriver");
-				conexion = DriverManager.getConnection(ruta + "//" + host);
+				this.conexion = DriverManager.getConnection(ruta + "//" + host);
 				connected = true;
 			} catch (SQLException | ClassNotFoundException e) {
 				e.printStackTrace();
@@ -59,7 +61,7 @@ public class Conexion {
 			}
 			break;
 		}
-
+		System.out.println(connected);
 		return connected;
 	}
 

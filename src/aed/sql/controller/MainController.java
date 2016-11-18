@@ -22,31 +22,36 @@ public class MainController {
 
 		app = primaryStage;
 
-		conexion = new Conexion(view.getRutaBox().getValue(), view.getHostText().getText(),
-				Integer.parseInt(view.getPuertoText().getText()), view.getDbText().getText(),
-				view.getUserText().getText(), view.getPasswordField().getText());
+		conexion = new Conexion();
 
-		librosController = new ListaLibrosController(conexion);
-
-		bindVistas();
+		// conexion = new Conexion(view.getRutaBox().getValue(),
+		// view.getHostText().getText(),
+		// Integer.parseInt(view.getPuertoText().getText()),
+		// view.getDbText().getText(),
+		// view.getUserText().getText(), view.getPasswordField().getText());
 
 		view.getConectarButton().setOnAction(e -> conectar());
-		view.getActualizarButton().setOnAction(e -> librosController.cargarLibros());
-	}
 
-	private void bindVistas() {
-		view.getLibrosTab().setContent(librosController.getView());
+//		view.getLibrosTab().setContent(librosController.getView());
+		view.getActualizarButton().setOnAction(e -> librosController.cargarLibros());
 	}
 
 	private void conectar() {
 
-		conexion = new Conexion(view.getRutaBox().getValue(), view.getHostText().getText(),
-				Integer.parseInt(view.getPuertoText().getText()), view.getDbText().getText(),
-				view.getUserText().getText(), view.getPasswordField().getText());
+		System.out.println(view.getRutaBox().getValue());
+
+		conexion.setRuta(view.getRutaBox().getValue());
+		conexion.setHost(view.getHostText().getText());
+		conexion.setPuerto(Integer.parseInt(view.getPuertoText().getText()));
+		conexion.setDb(view.getDbText().getText());
+		conexion.setUser(view.getUserText().getText());
+		conexion.setPassword(view.getPasswordField().getText());
+
+		librosController = new ListaLibrosController();
 
 		try {
 
-			if (conexion.conectar()) {
+			if (conexion.isConnected()) {
 
 				app.setTitle("Conectado a: MySQL");
 				// if (conexion.isConnected())
@@ -54,9 +59,9 @@ public class MainController {
 				view.getCir().setImage(new Image("resources/green.png"));
 
 			} else {
-				
-				System.out.println(conexion.conectar());
-				
+
+				System.out.println(conexion.isConnected());
+
 				Alert errorConnect = new Alert(AlertType.ERROR);
 				errorConnect.setHeaderText(null);
 				errorConnect.setContentText("Error al conectar con la base de datos: " + view.getDbText().getText());

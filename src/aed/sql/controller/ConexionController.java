@@ -8,7 +8,7 @@ public class ConexionController {
 
 	public ConexionController() {
 //		conexion = new Conexion();
-		conexion.conectar();
+//		conexion.conectar();
 	}
 
 	public Conexion getConexion() {

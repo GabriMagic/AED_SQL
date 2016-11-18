@@ -48,16 +48,16 @@ public class MainView extends BorderPane {
 		rutaBox.setItems(FXCollections.observableArrayList(optionList));
 		rutaBox.getSelectionModel().select(0);
 
-		hostText = new TextField("localhost");
+		hostText = new TextField();
 		hostText.setPromptText("Host...");
 
-		puertoText = new TextField("3306");
+		puertoText = new TextField();
 		puertoText.setPromptText("Puerto...");
 
-		userText = new TextField("root");
+		userText = new TextField();
 		userText.setPromptText("Usuario...");
 
-		dbText = new TextField("bdbiblioteca");
+		dbText = new TextField();
 		dbText.setPromptText("Base de datos...");
 
 		passwordField = new PasswordField();
