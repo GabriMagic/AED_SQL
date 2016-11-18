@@ -1,9 +1,11 @@
 package aed.sql.controller;
 
 import java.io.IOException;
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -52,7 +54,7 @@ public class ListaLibrosController {
 	private GridPane addAutorView;
 
 	@FXML
-	private ComboBox<String> autoresCombo;
+	private ComboBox<Autor> autoresCombo;
 
 	@FXML
 	private Label labelText;
@@ -67,6 +69,7 @@ public class ListaLibrosController {
 	private ListaLibros listaLibros;
 	private Conexion conexion;
 	private Stage insertStage;
+	private Pattern pattern;
 
 	public ListaLibrosController(Conexion conexion) {
 
@@ -85,6 +88,8 @@ public class ListaLibrosController {
 			addAutorView = loaderAutores.load();
 		} catch (IOException e1) {
 		}
+
+		pattern = Pattern.compile("[0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]-[a-zA-Z]");
 
 		view = new ListaLibrosView();
 
@@ -107,45 +112,50 @@ public class ListaLibrosController {
 		view.getEliminarMenu().setOnAction(e -> onEliminarButtonAction(e));
 		view.getAddLibroMenu().setOnAction(e -> onAddButtonAction(e));
 		view.getAddAutor().setOnAction(e -> onAddAutor(e));
-		
+
 		addAutorButton.setOnAction(e -> onConfirmAddAutor(e));
+		cancelAutorButton.setOnAction(e -> insertStage.close());
 
 	}
 
 	private void onConfirmAddAutor(ActionEvent e) {
-		
-		
-		
+		try {
+			CallableStatement pLibrosAutores = conexion.getConexion().prepareCall("CALL pLibrosAutores(?,?,?)");
+			pLibrosAutores.setString(1, view.getLibrosTable().getSelectionModel().getSelectedItem().getIsbn());
+			pLibrosAutores.setString(2, autoresCombo.getValue().getCodAutor());
+			pLibrosAutores.registerOutParameter(3, Types.INTEGER);
+			pLibrosAutores.execute();
+			cargarLibros();
+			insertStage.close();
+		} catch (SQLException e1) {
+			Alert duplicateKey = new Alert(AlertType.ERROR);
+			duplicateKey.setTitle("Error al añadir el autor");
+			duplicateKey.setHeaderText(null);
+			duplicateKey.setContentText("Ese libro ya tiene ese autor.");
+			duplicateKey.show();
+		}
 	}
 
 	private void onAddAutor(ActionEvent e) {
-
-		ObservableList<String> autores = FXCollections.observableArrayList();
-
+		ObservableList<Autor> autores = FXCollections.observableArrayList();
 		try {
 			PreparedStatement sql = conexion.getConexion().prepareStatement("SELECT * FROM autores");
 			ResultSet result = sql.executeQuery();
-
 			while (result.next()) {
-				autores.add(result.getString("nombreAutor"));
+				autores.add(new Autor(result.getString("codAutor"), result.getString("nombreAutor")));
 			}
-
 			autoresCombo.setItems(autores);
-
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-
 		labelText.setText(
 				"Añadir autor al libro: " + view.getLibrosTable().getSelectionModel().getSelectedItem().getNombre());
 		insertStage.getScene().setRoot(addAutorView);
 		insertStage.setTitle("Añadir autor");
 		insertStage.show();
-
 	}
 
 	private void updateIsbnLibro(CellEditEvent<Libro, String> e) {
-		Pattern pattern = Pattern.compile("[0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]-[a-zA-Z]");
 		Matcher mat = pattern.matcher(e.getNewValue());
 		if (mat.matches()) {
 			try {
@@ -238,20 +248,25 @@ public class ListaLibrosController {
 
 		if (conexion.conectar())
 			try {
+				Matcher mat = pattern.matcher(isbnText.getText());
+				if (mat.matches()) {
+					String sql = "INSERT INTO libros (nombreLibro, ISBN) VALUES (?,?)";
+					PreparedStatement query = conexion.getConexion().prepareStatement(sql);
 
-				String sql = "INSERT INTO libros (nombreLibro, ISBN) VALUES (?,?)";
-				PreparedStatement query = conexion.getConexion().prepareStatement(sql);
+					query.setString(1, nombreText.getText());
+					query.setString(2, isbnText.getText());
 
-				query.setString(1, nombreText.getText());
-				query.setString(2, isbnText.getText());
+					query.execute();
 
-				query.execute();
-
-				cargarLibros();
-			} catch (SQLException e1) {
-				System.out.println("ERRO SQL");
-				System.err.println(e1.getLocalizedMessage());
-			} catch (NullPointerException e2) {
+					cargarLibros();
+				} else {
+					Alert unvalidISBN = new Alert(AlertType.ERROR);
+					unvalidISBN.setTitle("Error de ISBN");
+					unvalidISBN.setHeaderText(null);
+					unvalidISBN.setContentText("No es un ISBN válido.");
+					unvalidISBN.show();
+				}
+			} catch (NullPointerException | SQLException e2) {
 				Alert errorCon = new Alert(AlertType.ERROR);
 				errorCon.setTitle("Error de conexión");
 				errorCon.setHeaderText("Error al conectar");

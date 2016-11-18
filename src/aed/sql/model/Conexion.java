@@ -16,14 +16,12 @@ public class Conexion {
 	}
 
 	public Conexion(String ruta, String host, int puerto, String db, String user, String password) {
-
 		this.ruta = ruta;
 		this.host = host;
 		this.puerto = puerto;
 		this.db = db;
 		this.user = user;
 		this.password = password;
-
 	}
 
 	public boolean conectar() {
@@ -44,6 +42,16 @@ public class Conexion {
 				Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 				link = ruta + "//" + host + ";" + "DataBaseName=" + db;
 				conexion = DriverManager.getConnection(link, user, password);
+				connected = true;
+			} catch (SQLException | ClassNotFoundException e) {
+				e.printStackTrace();
+				connected = false;
+			}
+			break;
+		case "jdbc:ucanaccess:":
+			try {
+				Class.forName("org.hsqldb.jdbcDriver");
+				conexion = DriverManager.getConnection(ruta + "//" + host);
 				connected = true;
 			} catch (SQLException | ClassNotFoundException e) {
 				e.printStackTrace();

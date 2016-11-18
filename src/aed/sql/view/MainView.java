@@ -36,6 +36,7 @@ public class MainView extends BorderPane {
 
 		optionList = new ArrayList<>();
 		optionList.add("jdbc:mysql:");
+		optionList.add("jdbc:ucanaccess:");
 		optionList.add("jdbc:sqlserver:");
 
 		conectarButton = new Button("Conectar");
