@@ -60,7 +60,6 @@ public class MainController {
 					librosController.getView().getAddAutor().setDisable(false);
 					view.getCir().setImage(new Image("resources/green.png"));
 					break;
-
 				case 2:
 					app.setTitle("Conectado a: ACCESS");
 					librosController.cargarLibros();
@@ -79,7 +78,6 @@ public class MainController {
 					errorConnect
 							.setContentText("Error al conectar con la base de datos: " + view.getDbText().getText());
 					errorConnect.show();
-
 					librosController.getListaLibros().getLibros().clear();
 					app.setTitle("-------");
 					view.getCir().setImage(new Image("resources/red.png"));

@@ -1,6 +1,7 @@
 package aed.sql.view;
 
 import java.util.ArrayList;
+
 import javafx.collections.FXCollections;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -12,6 +13,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.shape.Circle;
 
 public class MainView extends BorderPane {
 
@@ -41,6 +43,9 @@ public class MainView extends BorderPane {
 		optionList.add("jdbc:sqlserver:");
 
 		conDisconButton = new ToggleButton("", cir);
+		conDisconButton.setFocusTraversable(false);
+		conDisconButton.setShape(new Circle(1.5));
+		conDisconButton.setMaxSize(0,0);
 
 		actualizarButton = new Button("Actualizar");
 		actualizarButton.setDisable(true);
