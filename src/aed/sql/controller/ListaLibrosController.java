@@ -99,6 +99,19 @@ public class ListaLibrosController {
 	@FXML
 	private TableColumn<Libro, Date> pLEFechaIntro;
 
+	// pCantidadEjemplares
+	@FXML
+	private BorderPane pCEView;
+
+	@FXML
+	private Button pCEMostrar;
+
+	@FXML
+	private ComboBox<String> pCECombo;
+
+	@FXML
+	private Label pCELabel;
+
 	private ListaLibrosView view;
 	private ListaLibros listaLibros;
 	private Conexion conexion;
@@ -110,32 +123,12 @@ public class ListaLibrosController {
 
 		alertMessage = new Alert(AlertType.ERROR);
 		view = new ListaLibrosView();
-
-		FXMLLoader loaderLibros = new FXMLLoader(getClass().getResource("/aed/sql/view/insertLibroView.fxml"));
-		loaderLibros.setController(this);
-		try {
-			insertLibroView = loaderLibros.load();
-		} catch (IOException e1) {
-		}
-
-		FXMLLoader loaderAutores = new FXMLLoader(getClass().getResource("/aed/sql/view/AddAutorView.fxml"));
-		loaderAutores.setController(this);
-		try {
-			addAutorView = loaderAutores.load();
-		} catch (IOException e1) {
-		}
-
-		FXMLLoader pLE = new FXMLLoader(getClass().getResource("/aed/sql/view/pLEView.fxml"));
-		pLE.setController(this);
-		try {
-			pLEView = pLE.load();
-		} catch (IOException e1) {
-		}
-
+		listaLibros = new ListaLibros();
 		pattern = Pattern.compile("[0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]-[a-zA-Z]");
 
-		listaLibros = new ListaLibros();
+		FXMLloaders();
 
+		// Tabla PLE
 		pLECodLibro.setCellValueFactory(new PropertyValueFactory<>("codLibro"));
 		pLENombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
 		pLEAutor.setCellValueFactory(new PropertyValueFactory<>("autor"));
@@ -158,10 +151,52 @@ public class ListaLibrosController {
 		view.getAddLibroMenu().setOnAction(e -> onAddButtonAction(e));
 		view.getAddAutor().setOnAction(e -> onAddAutor(e));
 		view.getpListaEjemplares().setOnAction(e -> pListaEjemplares(e));
+		view.getpCantidadEjemplares().setOnAction(e -> pCantidadEjemplares(e));
 
 		addAutorButton.setOnAction(e -> onConfirmAddAutor(e));
 		cancelAutorButton.setOnAction(e -> secondaryStage.close());
 		pLEMostrar.setOnAction(e -> MpLE(e));
+		pCEMostrar.setOnAction(e -> MpCE(e));
+
+	}
+
+	private void MpCE(ActionEvent e) {
+
+		try {
+			CallableStatement pCantidadEjemplares = conexion.getConexion()
+					.prepareCall("CALL pCantidadEjemplares(?,?,?)");
+			pCantidadEjemplares.setString(1, pCECombo.getValue());
+			pCantidadEjemplares.registerOutParameter(2, Types.INTEGER);
+			pCantidadEjemplares.registerOutParameter(3, Types.DATE);
+
+			pCantidadEjemplares.execute();
+
+			pCELabel.setText("Cantidad de ejemplares: " + pCantidadEjemplares.getInt(2));
+
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
+	}
+
+	private void pCantidadEjemplares(ActionEvent e) {
+
+		ObservableList<String> ISBNs = FXCollections.observableArrayList();
+		PreparedStatement sql;
+		try {
+			sql = conexion.getConexion().prepareStatement("SELECT * FROM libros");
+			ResultSet result = sql.executeQuery();
+			while (result.next()) {
+				ISBNs.add(result.getString("ISBN"));
+			}
+			pCECombo.setItems(ISBNs);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
+		secondaryStage.setTitle("pCantidadEjemplares");
+		secondaryStage.getScene().setRoot(pCEView);
+		secondaryStage.show();
 
 	}
 
@@ -235,10 +270,9 @@ public class ListaLibrosController {
 			PreparedStatement sql = conexion.getConexion().prepareStatement("SELECT * FROM autores");
 			ResultSet result = sql.executeQuery();
 			while (result.next()) {
-				
+
 				autores.add(new Autor(result.getString("codAutor"), result.getString("nombreAutor")));
 			}
-			System.out.println(autores);
 			autoresCombo.setItems(autores);
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -323,15 +357,19 @@ public class ListaLibrosController {
 				Optional<ButtonType> answer = alertMessage.showAndWait();
 				if (answer.get() == ButtonType.OK) {
 					try {
-						PreparedStatement query3 = conexion.getConexion()
+						PreparedStatement query1 = conexion.getConexion()
 								.prepareStatement("DELETE FROM librosautores WHERE codLibro = ?");
-						query3.setInt(1, aux);
-						query3.execute();
+						query1.setInt(1, aux);
+						query1.execute();
 
 						PreparedStatement query2 = conexion.getConexion()
 								.prepareStatement("DELETE FROM ejemplares WHERE codLibro = ?");
 						query2.setInt(1, aux);
 						query2.execute();
+						PreparedStatement query3 = conexion.getConexion()
+								.prepareStatement("DELETE FROM libros WHERE codLibro = ?");
+						query3.setInt(1, aux);
+						query3.execute();
 						cargarLibros();
 					} catch (SQLException e2) {
 						System.out.println(e2.getLocalizedMessage());
@@ -429,6 +467,36 @@ public class ListaLibrosController {
 			}
 		}
 
+	}
+
+	private void FXMLloaders() {
+		FXMLLoader loaderLibros = new FXMLLoader(getClass().getResource("/aed/sql/view/InsertLibroView.fxml"));
+		loaderLibros.setController(this);
+		try {
+			insertLibroView = loaderLibros.load();
+		} catch (IOException e1) {
+		}
+
+		FXMLLoader loaderAutores = new FXMLLoader(getClass().getResource("/aed/sql/view/AddAutorView.fxml"));
+		loaderAutores.setController(this);
+		try {
+			addAutorView = loaderAutores.load();
+		} catch (IOException e1) {
+		}
+
+		FXMLLoader pLE = new FXMLLoader(getClass().getResource("/aed/sql/view/PLEView.fxml"));
+		pLE.setController(this);
+		try {
+			pLEView = pLE.load();
+		} catch (IOException e1) {
+		}
+
+		FXMLLoader pCE = new FXMLLoader(getClass().getResource("/aed/sql/view/PCEView.fxml"));
+		pCE.setController(this);
+		try {
+			pCEView = pCE.load();
+		} catch (IOException e1) {
+		}
 	}
 
 	public ListaLibrosView getView() {
