@@ -398,7 +398,8 @@ public class ListaLibrosController {
 				String query = "SELECT lb.codLibro, nombreLibro, ISBN, fechaIntro, codEjemplar, importe, nombreAutor, au.codAutor FROM libros as lb "
 						+ "left join ejemplares as ej on ej.codLibro = lb.codLibro "
 						+ "left join librosautores as lau on lau.codLibro = lb.codLibro "
-						+ "left join autores as au on au.codAutor = lau.codAutor";
+						+ "left join autores as au on au.codAutor = lau.codAutor "
+						+ "ORDER BY lb.codLibro";
 
 				PreparedStatement sql = conexion.getConexion().prepareStatement(query);
 
