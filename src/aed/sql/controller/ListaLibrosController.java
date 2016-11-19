@@ -91,6 +91,16 @@ public class ListaLibrosController {
 	private ComboBox<String> pCECombo;
 	@FXML
 	private Label pCELabel;
+	// fNumLibros
+	@FXML
+	private BorderPane fNLView;
+	@FXML
+	private ComboBox<String> fNLCombo;
+	@FXML
+	private Button fNLMostrar;
+	@FXML
+	private Label fNLLabel;
+
 	private ListaLibrosView view;
 	private ListaLibros listaLibros;
 	private Conexion conexion;
@@ -137,6 +147,7 @@ public class ListaLibrosController {
 		cancelAutorButton.setOnAction(e -> secondaryStage.close());
 		pLEMostrar.setOnAction(e -> MpLE(e));
 		pCEMostrar.setOnAction(e -> MpCE(e));
+		fNLMostrar.setOnAction(e -> MfNL(e));
 
 	}
 
@@ -154,12 +165,33 @@ public class ListaLibrosController {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		pCELabel.setText("");
-		varLabel.setText("Autor: ");
 		secondaryStage.setTitle("fnumAutorLibro");
 		secondaryStage.getScene().setRoot(pCEView);
 		secondaryStage.show();
 
+	}
+
+	private void MfNL(ActionEvent e) {
+
+	}
+
+	private void pCantidadEjemplares(ActionEvent e) {
+		try {
+			ObservableList<String> ISBNs = FXCollections.observableArrayList();
+			PreparedStatement sql = conexion.getConexion().prepareStatement("SELECT * FROM libros");
+			ResultSet result = sql.executeQuery();
+			while (result.next()) {
+				ISBNs.add(result.getString("ISBN"));
+			}
+			pCECombo.setItems(ISBNs);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		pCELabel.setText("");
+		pCECombo.setValue(null);
+		secondaryStage.setTitle("pCantidadEjemplares");
+		secondaryStage.getScene().setRoot(pCEView);
+		secondaryStage.show();
 	}
 
 	private void MpCE(ActionEvent e) {
@@ -181,25 +213,23 @@ public class ListaLibrosController {
 
 	}
 
-	private void pCantidadEjemplares(ActionEvent e) {
+	private void pListaEjemplares(ActionEvent e) {
 
+		ObservableList<Autor> autores = FXCollections.observableArrayList();
 		try {
-			ObservableList<String> ISBNs = FXCollections.observableArrayList();
-			PreparedStatement sql = conexion.getConexion().prepareStatement("SELECT * FROM libros");
+			PreparedStatement sql = conexion.getConexion().prepareStatement("SELECT * FROM autores");
 			ResultSet result = sql.executeQuery();
 			while (result.next()) {
-				ISBNs.add(result.getString("ISBN"));
+				autores.add(new Autor(result.getString("codAutor"), result.getString("nombreAutor")));
 			}
-			pCECombo.setItems(ISBNs);
+			pLECombo.setItems(autores);
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		pCELabel.setText("");
-		varLabel.setText("ISBN: ");
-		secondaryStage.setTitle("pCantidadEjemplares");
-		secondaryStage.getScene().setRoot(pCEView);
-		secondaryStage.show();
 
+		secondaryStage.setTitle("pListaEjemplares");
+		secondaryStage.getScene().setRoot(pLEView);
+		secondaryStage.show();
 	}
 
 	private void MpLE(ActionEvent e) {
@@ -222,25 +252,6 @@ public class ListaLibrosController {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-	}
-
-	private void pListaEjemplares(ActionEvent e) {
-
-		ObservableList<Autor> autores = FXCollections.observableArrayList();
-		try {
-			PreparedStatement sql = conexion.getConexion().prepareStatement("SELECT * FROM autores");
-			ResultSet result = sql.executeQuery();
-			while (result.next()) {
-				autores.add(new Autor(result.getString("codAutor"), result.getString("nombreAutor")));
-			}
-			pLECombo.setItems(autores);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-
-		secondaryStage.setTitle("pListaEjemplares");
-		secondaryStage.getScene().setRoot(pLEView);
-		secondaryStage.show();
 	}
 
 	private void onConfirmAddAutor(ActionEvent e) {
@@ -494,6 +505,12 @@ public class ListaLibrosController {
 		pCE.setController(this);
 		try {
 			pCEView = pCE.load();
+		} catch (IOException e1) {
+		}
+		FXMLLoader fNL = new FXMLLoader(getClass().getResource("/aed/sql/view/FnumAutorLibro.fxml"));
+		fNL.setController(this);
+		try {
+			fNLView = fNL.load();
 		} catch (IOException e1) {
 		}
 	}
