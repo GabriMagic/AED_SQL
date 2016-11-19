@@ -2,12 +2,12 @@ package aed.sql.controller;
 
 import java.io.IOException;
 import java.sql.CallableStatement;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,9 +28,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -67,14 +71,44 @@ public class ListaLibrosController {
 	@FXML
 	private Button cancelAutorButton;
 
+	// pListaEjemplares
+	@FXML
+	private BorderPane pLEView;
+
+	@FXML
+	private ComboBox<Autor> pLECombo;
+
+	@FXML
+	private TableView<Libro> pLETable;
+
+	@FXML
+	private Button pLEMostrar;
+
+	@FXML
+	private TableColumn<Libro, Integer> pLECodLibro;
+
+	@FXML
+	private TableColumn<Libro, String> pLENombre;
+
+	@FXML
+	private TableColumn<Libro, String> pLEAutor;
+
+	@FXML
+	private TableColumn<Libro, String> pLEIsbn;
+
+	@FXML
+	private TableColumn<Libro, Date> pLEFechaIntro;
+
 	private ListaLibrosView view;
 	private ListaLibros listaLibros;
 	private Conexion conexion;
-	private Stage insertStage;
+	private Stage secondaryStage;
 	private Pattern pattern;
+	private Alert alertMessage;
 
 	public ListaLibrosController() {
 
+		alertMessage = new Alert(AlertType.ERROR);
 		view = new ListaLibrosView();
 
 		FXMLLoader loaderLibros = new FXMLLoader(getClass().getResource("/aed/sql/view/insertLibroView.fxml"));
@@ -91,15 +125,28 @@ public class ListaLibrosController {
 		} catch (IOException e1) {
 		}
 
+		FXMLLoader pLE = new FXMLLoader(getClass().getResource("/aed/sql/view/pLEView.fxml"));
+		pLE.setController(this);
+		try {
+			pLEView = pLE.load();
+		} catch (IOException e1) {
+		}
+
 		pattern = Pattern.compile("[0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]-[a-zA-Z]");
 
 		listaLibros = new ListaLibros();
 
-		insertStage = new Stage();
-		insertStage.setTitle("Añadir Libro");
-		insertStage.setResizable(false);
-		insertStage.initModality(Modality.APPLICATION_MODAL);
-		insertStage.setScene(new Scene(insertLibroView));
+		pLECodLibro.setCellValueFactory(new PropertyValueFactory<>("codLibro"));
+		pLENombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+		pLEAutor.setCellValueFactory(new PropertyValueFactory<>("autor"));
+		pLEIsbn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
+		pLEFechaIntro.setCellValueFactory(new PropertyValueFactory<>("fechaIntro"));
+
+		secondaryStage = new Stage();
+		secondaryStage.setTitle("Añadir Libro");
+		secondaryStage.setResizable(false);
+		secondaryStage.initModality(Modality.APPLICATION_MODAL);
+		secondaryStage.setScene(new Scene(insertLibroView));
 
 		view.getNombreLibroColumn().setCellFactory(TextFieldTableCell.forTableColumn());
 		view.getIsbnLibroColumn().setCellFactory(TextFieldTableCell.forTableColumn());
@@ -110,27 +157,75 @@ public class ListaLibrosController {
 		view.getEliminarMenu().setOnAction(e -> onEliminarButtonAction(e));
 		view.getAddLibroMenu().setOnAction(e -> onAddButtonAction(e));
 		view.getAddAutor().setOnAction(e -> onAddAutor(e));
+		view.getpListaEjemplares().setOnAction(e -> pListaEjemplares(e));
 
 		addAutorButton.setOnAction(e -> onConfirmAddAutor(e));
-		cancelAutorButton.setOnAction(e -> insertStage.close());
+		cancelAutorButton.setOnAction(e -> secondaryStage.close());
+		pLEMostrar.setOnAction(e -> MpLE(e));
+
+	}
+
+	private void MpLE(ActionEvent e) {
+		pLETable.getItems().clear();
+		try {
+			ObservableList<Libro> pLELibros = FXCollections.observableArrayList();
+			CallableStatement pListaEjemplares = conexion.getConexion().prepareCall("CALL pListaEjemplares(?)");
+			pListaEjemplares.setString(1, pLECombo.getValue().getNombreAutor());
+			ResultSet resultado = pListaEjemplares.executeQuery();
+			while (resultado.next()) {
+				Libro l1 = new Libro();
+				l1.setCodLibro(resultado.getInt("codLibro"));
+				l1.setNombre(resultado.getString("nombreLibro"));
+				l1.setAutor(resultado.getString("nombreAutor"));
+				l1.setIsbn(resultado.getString("ISBN"));
+				l1.setFechaIntro(resultado.getDate("fechaIntro"));
+				pLELibros.add(l1);
+			}
+			pLETable.setItems(pLELibros);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	private void pListaEjemplares(ActionEvent e) {
+
+		ObservableList<Autor> autores = FXCollections.observableArrayList();
+		try {
+			PreparedStatement sql = conexion.getConexion().prepareStatement("SELECT * FROM autores");
+			ResultSet result = sql.executeQuery();
+			while (result.next()) {
+				autores.add(new Autor(result.getString("codAutor"), result.getString("nombreAutor")));
+			}
+			pLECombo.setItems(autores);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
+		secondaryStage.setTitle("pListaEjemplares");
+		secondaryStage.getScene().setRoot(pLEView);
+		secondaryStage.show();
 	}
 
 	private void onConfirmAddAutor(ActionEvent e) {
 		try {
-			CallableStatement pLibrosAutores = conexion.getConexion().prepareCall("CALL pLibrosAutores(?,?,?)");
-			pLibrosAutores.setString(1, view.getLibrosTable().getSelectionModel().getSelectedItem().getIsbn());
-			pLibrosAutores.setString(2, autoresCombo.getValue().getCodAutor());
-			pLibrosAutores.registerOutParameter(3, Types.INTEGER);
-			pLibrosAutores.execute();
+			if (autoresCombo.getValue() != null) {
+				CallableStatement pLibrosAutores = conexion.getConexion().prepareCall("CALL pLibrosAutores(?,?,?)");
+				pLibrosAutores.setString(1, view.getLibrosTable().getSelectionModel().getSelectedItem().getIsbn());
+				pLibrosAutores.setString(2, autoresCombo.getValue().getCodAutor());
+				pLibrosAutores.registerOutParameter(3, Types.INTEGER);
+				pLibrosAutores.execute();
+			} else {
+
+			}
 			cargarLibros();
-			insertStage.close();
+			secondaryStage.close();
 		} catch (SQLException e1) {
 			System.out.println(e1.getLocalizedMessage());
-			Alert duplicateKey = new Alert(AlertType.ERROR);
-			duplicateKey.setTitle("Error al añadir el autor");
-			duplicateKey.setHeaderText(null);
-			duplicateKey.setContentText("Ese libro ya tiene ese autor.");
-			duplicateKey.show();
+			alertMessage.setAlertType(AlertType.ERROR);
+			alertMessage.setTitle("Error al añadir el autor");
+			alertMessage.setHeaderText(null);
+			alertMessage.setContentText("Ese libro ya tiene ese autor.");
+			alertMessage.show();
 		}
 	}
 
@@ -148,9 +243,9 @@ public class ListaLibrosController {
 		}
 		labelText.setText(
 				"Añadir autor al libro: " + view.getLibrosTable().getSelectionModel().getSelectedItem().getNombre());
-		insertStage.getScene().setRoot(addAutorView);
-		insertStage.setTitle("Añadir autor");
-		insertStage.show();
+		secondaryStage.getScene().setRoot(addAutorView);
+		secondaryStage.setTitle("Añadir autor");
+		secondaryStage.show();
 	}
 
 	private void updateIsbnLibro(CellEditEvent<Libro, String> e) {
@@ -159,7 +254,6 @@ public class ListaLibrosController {
 			try {
 				PreparedStatement updateNombreLibro = conexion.getConexion()
 						.prepareStatement("UPDATE libros SET ISBN = ? WHERE codLibro = ?");
-
 				updateNombreLibro.setInt(2, view.getLibrosTable().getSelectionModel().getSelectedItem().getCodLibro());
 				updateNombreLibro.setString(1, e.getNewValue());
 				updateNombreLibro.executeUpdate();
@@ -167,11 +261,11 @@ public class ListaLibrosController {
 			} catch (SQLException e1) {
 			}
 		} else {
-			Alert unvalidISBN = new Alert(AlertType.ERROR);
-			unvalidISBN.setTitle("Error al modificar el ISBN");
-			unvalidISBN.setHeaderText(null);
-			unvalidISBN.setContentText("No es un ISBN válido.");
-			unvalidISBN.show();
+			alertMessage.setAlertType(AlertType.ERROR);
+			alertMessage.setTitle("Error al modificar el ISBN");
+			alertMessage.setHeaderText(null);
+			alertMessage.setContentText("No es un ISBN válido.");
+			alertMessage.show();
 			view.getIsbnLibroColumn().setVisible(false);
 			view.getIsbnLibroColumn().setVisible(true);
 		}
@@ -191,14 +285,14 @@ public class ListaLibrosController {
 
 	private void onAddButtonAction(ActionEvent e) {
 		if (conexion.isConnected() > 0) {
-			insertStage.getScene().setRoot(insertLibroView);
-			insertStage.show();
+			secondaryStage.getScene().setRoot(insertLibroView);
+			secondaryStage.show();
 		} else {
-			Alert errorCon = new Alert(AlertType.ERROR);
-			errorCon.setTitle("Error de conexión");
-			errorCon.setHeaderText("Error al conectar");
-			errorCon.setContentText("La conexión no se ha establecido");
-			errorCon.show();
+			alertMessage.setAlertType(AlertType.ERROR);
+			alertMessage.setTitle("Error de conexión");
+			alertMessage.setHeaderText("Error al conectar");
+			alertMessage.setContentText("La conexión no se ha establecido");
+			alertMessage.show();
 		}
 	}
 
@@ -206,11 +300,11 @@ public class ListaLibrosController {
 		int aux = view.getLibrosTable().getSelectionModel().getSelectedItem().getCodLibro();
 		if (conexion.isConnected() > 0) {
 			try {
-				Alert eliminarConfirm = new Alert(AlertType.CONFIRMATION);
-				eliminarConfirm.setTitle("Atención!");
-				eliminarConfirm.setHeaderText("Esta accción no se puede deshacer");
-				eliminarConfirm.setContentText("¿Desea eliminar el libro de todas formas?");
-				Optional<ButtonType> answer = eliminarConfirm.showAndWait();
+				alertMessage.setAlertType(AlertType.CONFIRMATION);
+				alertMessage.setTitle("Atención!");
+				alertMessage.setHeaderText("Esta accción no se puede deshacer");
+				alertMessage.setContentText("¿Desea eliminar el libro de todas formas?");
+				Optional<ButtonType> answer = alertMessage.showAndWait();
 				if (answer.get() == ButtonType.OK) {
 					PreparedStatement query = conexion.getConexion()
 							.prepareStatement("DELETE FROM libros WHERE codLibro = ?");
@@ -220,11 +314,11 @@ public class ListaLibrosController {
 					cargarLibros();
 				}
 			} catch (SQLException e1) {
-				Alert eliminarConfirm = new Alert(AlertType.CONFIRMATION);
-				eliminarConfirm.setTitle("Error al borrar");
-				eliminarConfirm.setHeaderText("El libro que desea borrar tiene más de un ejemplar.");
-				eliminarConfirm.setContentText("¿Desea eliminar todos sus ejemplares?");
-				Optional<ButtonType> answer = eliminarConfirm.showAndWait();
+				alertMessage.setAlertType(AlertType.CONFIRMATION);
+				alertMessage.setTitle("Error al borrar");
+				alertMessage.setHeaderText("El libro que desea borrar tiene más de un ejemplar.");
+				alertMessage.setContentText("¿Desea eliminar todos sus ejemplares?");
+				Optional<ButtonType> answer = alertMessage.showAndWait();
 				if (answer.get() == ButtonType.OK) {
 					try {
 						PreparedStatement query3 = conexion.getConexion()
@@ -260,37 +354,37 @@ public class ListaLibrosController {
 					if (conexion.isConnected() == 1) {
 						query.setDate(3, null);
 					} else if (conexion.isConnected() == 2) {
-						java.util.Date aux = Calendar.getInstance().getTime();
-						Date sqlDate = new java.sql.Date(aux.getTime());
+						Date aux = Calendar.getInstance().getTime();
+						java.sql.Date sqlDate = new java.sql.Date(aux.getTime());
 						query.setDate(3, sqlDate);
 					}
 					query.execute();
 
 					cargarLibros();
 				} else {
-					Alert unvalidISBN = new Alert(AlertType.ERROR);
-					unvalidISBN.setTitle("Error de ISBN");
-					unvalidISBN.setHeaderText(null);
-					unvalidISBN.setContentText("No es un ISBN válido.");
-					unvalidISBN.show();
+					alertMessage.setAlertType(AlertType.ERROR);
+					alertMessage.setTitle("Error de ISBN");
+					alertMessage.setHeaderText(null);
+					alertMessage.setContentText("No es un ISBN válido.");
+					alertMessage.show();
 				}
 			} catch (NullPointerException | SQLException e2) {
 				System.err.println(e2.getLocalizedMessage());
-				Alert errorCon = new Alert(AlertType.ERROR);
-				errorCon.setTitle("Error de conexión");
-				errorCon.setHeaderText("Error al conectar");
-				errorCon.setContentText("La conexión no se ha establecido");
-				errorCon.show();
+				alertMessage.setAlertType(AlertType.ERROR);
+				alertMessage.setTitle("Error de conexión");
+				alertMessage.setHeaderText("Error al conectar");
+				alertMessage.setContentText("La conexión no se ha establecido");
+				alertMessage.show();
 			} finally {
 				nombreText.setText("");
 				isbnText.setText("");
-				insertStage.close();
+				secondaryStage.close();
 			}
 	}
 
 	@FXML
 	void onCancelButton(ActionEvent event) {
-		insertStage.close();
+		secondaryStage.close();
 	}
 
 	public void cargarLibros() {

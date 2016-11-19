@@ -48,6 +48,7 @@ public class MainView extends BorderPane {
 		conDisconButton.setMaxSize(0,0);
 
 		actualizarButton = new Button("Actualizar");
+		actualizarButton.setDefaultButton(true);
 		actualizarButton.setDisable(true);
 
 		rutaBox = new ComboBox<>();
@@ -74,7 +75,7 @@ public class MainView extends BorderPane {
 
 		librosTab = new Tab("Libros");
 		librosTab.setClosable(false);
-		insertTab = new Tab("Autores");
+		insertTab = new Tab("xXx");
 		insertTab.setClosable(false);
 
 		TabPane tabPane = new TabPane();

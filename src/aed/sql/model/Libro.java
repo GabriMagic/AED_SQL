@@ -9,11 +9,12 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 public class Libro {
 
 	private IntegerProperty codLibro, codEjemplar;
-	private SimpleStringProperty nombre, isbn, autor, codAutor;
+	private StringProperty nombre, isbn, autor, codAutor;
 	private ObjectProperty<Date> fechaIntro;
 	private DoubleProperty importe;
 
@@ -36,6 +37,7 @@ public class Libro {
 		isbn = new SimpleStringProperty(this, "isbn");
 		codAutor = new SimpleStringProperty(this, "codAutor");
 		fechaIntro = new SimpleObjectProperty<>(this, "fechaIntro");
+		autor = new SimpleStringProperty(this, "autor");
 	}
 
 	public IntegerProperty codLibroProperty() {
@@ -62,7 +64,7 @@ public class Libro {
 		this.codEjemplarProperty().set(codEjemplar);
 	}
 
-	public SimpleStringProperty nombreProperty() {
+	public StringProperty nombreProperty() {
 		return this.nombre;
 	}
 
@@ -74,7 +76,7 @@ public class Libro {
 		this.nombreProperty().set(nombre);
 	}
 
-	public SimpleStringProperty isbnProperty() {
+	public StringProperty isbnProperty() {
 		return this.isbn;
 	}
 
@@ -86,7 +88,7 @@ public class Libro {
 		this.isbnProperty().set(isbn);
 	}
 
-	public SimpleStringProperty autorProperty() {
+	public StringProperty autorProperty() {
 		return this.autor;
 	}
 
@@ -96,6 +98,18 @@ public class Libro {
 
 	public void setAutor(final String autor) {
 		this.autorProperty().set(autor);
+	}
+
+	public StringProperty codAutorProperty() {
+		return this.codAutor;
+	}
+
+	public String getCodAutor() {
+		return this.codAutorProperty().get();
+	}
+
+	public void setCodAutor(final String codAutor) {
+		this.codAutorProperty().set(codAutor);
 	}
 
 	public ObjectProperty<Date> fechaIntroProperty() {
@@ -120,18 +134,6 @@ public class Libro {
 
 	public void setImporte(final double importe) {
 		this.importeProperty().set(importe);
-	}
-
-	public SimpleStringProperty codAutorProperty() {
-		return this.codAutor;
-	}
-
-	public String getCodAutor() {
-		return this.codAutorProperty().get();
-	}
-
-	public void setCodAutor(final String codAutor) {
-		this.codAutorProperty().set(codAutor);
 	}
 
 }
