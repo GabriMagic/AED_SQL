@@ -43,75 +43,54 @@ public class ListaLibrosController {
 
 	@FXML
 	private GridPane insertLibroView;
-
 	@FXML
 	private TextField nombreText;
-
 	@FXML
 	private TextField isbnText;
-
 	@FXML
 	private Button addLibroButton;
-
 	@FXML
 	private Button cancelButton;
-
 	@FXML
 	private GridPane addAutorView;
-
 	@FXML
 	private ComboBox<Autor> autoresCombo;
-
 	@FXML
 	private Label labelText;
-
 	@FXML
 	private Button addAutorButton;
-
 	@FXML
 	private Button cancelAutorButton;
-
 	// pListaEjemplares
 	@FXML
 	private BorderPane pLEView;
-
 	@FXML
 	private ComboBox<Autor> pLECombo;
-
 	@FXML
 	private TableView<Libro> pLETable;
-
 	@FXML
 	private Button pLEMostrar;
-
 	@FXML
 	private TableColumn<Libro, Integer> pLECodLibro;
-
 	@FXML
 	private TableColumn<Libro, String> pLENombre;
-
 	@FXML
 	private TableColumn<Libro, String> pLEAutor;
-
 	@FXML
 	private TableColumn<Libro, String> pLEIsbn;
-
 	@FXML
 	private TableColumn<Libro, Date> pLEFechaIntro;
-
+	@FXML
+	private Label varLabel;
 	// pCantidadEjemplares
 	@FXML
 	private BorderPane pCEView;
-
 	@FXML
 	private Button pCEMostrar;
-
 	@FXML
 	private ComboBox<String> pCECombo;
-
 	@FXML
 	private Label pCELabel;
-
 	private ListaLibrosView view;
 	private ListaLibros listaLibros;
 	private Conexion conexion;
@@ -152,11 +131,34 @@ public class ListaLibrosController {
 		view.getAddAutor().setOnAction(e -> onAddAutor(e));
 		view.getpListaEjemplares().setOnAction(e -> pListaEjemplares(e));
 		view.getpCantidadEjemplares().setOnAction(e -> pCantidadEjemplares(e));
+		view.getFnumAutorLibro().setOnAction(e -> fnumAutorLibro(e));
 
 		addAutorButton.setOnAction(e -> onConfirmAddAutor(e));
 		cancelAutorButton.setOnAction(e -> secondaryStage.close());
 		pLEMostrar.setOnAction(e -> MpLE(e));
 		pCEMostrar.setOnAction(e -> MpCE(e));
+
+	}
+
+	private void fnumAutorLibro(ActionEvent e) {
+
+		ObservableList<String> autores = FXCollections.observableArrayList();
+		PreparedStatement sql;
+		try {
+			sql = conexion.getConexion().prepareStatement("SELECT * FROM autores");
+			ResultSet result = sql.executeQuery();
+			while (result.next()) {
+				autores.add(result.getString(2));
+			}
+			pCECombo.setItems(autores);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		pCELabel.setText("");
+		varLabel.setText("Autor: ");
+		secondaryStage.setTitle("fnumAutorLibro");
+		secondaryStage.getScene().setRoot(pCEView);
+		secondaryStage.show();
 
 	}
 
@@ -181,10 +183,9 @@ public class ListaLibrosController {
 
 	private void pCantidadEjemplares(ActionEvent e) {
 
-		ObservableList<String> ISBNs = FXCollections.observableArrayList();
-		PreparedStatement sql;
 		try {
-			sql = conexion.getConexion().prepareStatement("SELECT * FROM libros");
+			ObservableList<String> ISBNs = FXCollections.observableArrayList();
+			PreparedStatement sql = conexion.getConexion().prepareStatement("SELECT * FROM libros");
 			ResultSet result = sql.executeQuery();
 			while (result.next()) {
 				ISBNs.add(result.getString("ISBN"));
@@ -193,7 +194,8 @@ public class ListaLibrosController {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-
+		pCELabel.setText("");
+		varLabel.setText("ISBN: ");
 		secondaryStage.setTitle("pCantidadEjemplares");
 		secondaryStage.getScene().setRoot(pCEView);
 		secondaryStage.show();
@@ -476,21 +478,18 @@ public class ListaLibrosController {
 			insertLibroView = loaderLibros.load();
 		} catch (IOException e1) {
 		}
-
 		FXMLLoader loaderAutores = new FXMLLoader(getClass().getResource("/aed/sql/view/AddAutorView.fxml"));
 		loaderAutores.setController(this);
 		try {
 			addAutorView = loaderAutores.load();
 		} catch (IOException e1) {
 		}
-
 		FXMLLoader pLE = new FXMLLoader(getClass().getResource("/aed/sql/view/PLEView.fxml"));
 		pLE.setController(this);
 		try {
 			pLEView = pLE.load();
 		} catch (IOException e1) {
 		}
-
 		FXMLLoader pCE = new FXMLLoader(getClass().getResource("/aed/sql/view/PCEView.fxml"));
 		pCE.setController(this);
 		try {

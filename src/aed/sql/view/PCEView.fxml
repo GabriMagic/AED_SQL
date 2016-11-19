@@ -14,7 +14,7 @@
    <top>
       <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <Label text="ISBN:" />
+            <Label fx:id="varLabel" text="ISBN:" />
             <ComboBox fx:id="pCECombo" />
             <Button fx:id="pCEMostrar" mnemonicParsing="false" text="Mostrar" />
          </children>

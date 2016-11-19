@@ -19,7 +19,7 @@ public class ListaLibrosView extends BorderPane {
 	private TableColumn<Libro, Integer> codLibroColumn, ejemplarColumn;
 	private TableColumn<Libro, Double> importeColumn;
 	private ContextMenu contextMenu;
-	private MenuItem eliminarMenu, addLibroMenu, addAutor, pListaEjemplares, pCantidadEjemplares;
+	private MenuItem eliminarMenu, addLibroMenu, addAutor, pListaEjemplares, pCantidadEjemplares, fnumAutorLibro;
 
 	public MenuItem getpListaEjemplares() {
 		return pListaEjemplares;
@@ -32,9 +32,11 @@ public class ListaLibrosView extends BorderPane {
 		addAutor = new MenuItem("Añadir autor");
 		pListaEjemplares = new MenuItem("pListaEjemplares");
 		pCantidadEjemplares = new MenuItem("pCantidadEjemplares");
+		fnumAutorLibro = new MenuItem("fnumAutorLibro");
 
 		contextMenu = new ContextMenu();
-		contextMenu.getItems().addAll(addLibroMenu, eliminarMenu, new SeparatorMenuItem(), addAutor, pListaEjemplares, pCantidadEjemplares);
+		contextMenu.getItems().addAll(addLibroMenu, eliminarMenu, new SeparatorMenuItem(), addAutor, pListaEjemplares,
+				pCantidadEjemplares, fnumAutorLibro);
 
 		librosTable = new TableView<>();
 		librosTable.setEditable(true);
@@ -72,6 +74,10 @@ public class ListaLibrosView extends BorderPane {
 		librosTable.getColumns().add(importeColumn);
 
 		setCenter(librosTable);
+	}
+
+	public MenuItem getFnumAutorLibro() {
+		return fnumAutorLibro;
 	}
 
 	public MenuItem getpCantidadEjemplares() {
