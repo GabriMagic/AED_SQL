@@ -235,8 +235,10 @@ public class ListaLibrosController {
 			PreparedStatement sql = conexion.getConexion().prepareStatement("SELECT * FROM autores");
 			ResultSet result = sql.executeQuery();
 			while (result.next()) {
+				
 				autores.add(new Autor(result.getString("codAutor"), result.getString("nombreAutor")));
 			}
+			System.out.println(autores);
 			autoresCombo.setItems(autores);
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -398,8 +400,7 @@ public class ListaLibrosController {
 				String query = "SELECT lb.codLibro, nombreLibro, ISBN, fechaIntro, codEjemplar, importe, nombreAutor, au.codAutor FROM libros as lb "
 						+ "left join ejemplares as ej on ej.codLibro = lb.codLibro "
 						+ "left join librosautores as lau on lau.codLibro = lb.codLibro "
-						+ "left join autores as au on au.codAutor = lau.codAutor "
-						+ "ORDER BY lb.codLibro";
+						+ "left join autores as au on au.codAutor = lau.codAutor ORDER BY lb.codLibro";
 
 				PreparedStatement sql = conexion.getConexion().prepareStatement(query);
 

@@ -58,18 +58,21 @@ public class MainController {
 					app.setTitle("Conectado a: MySQL");
 					librosController.cargarLibros();
 					librosController.getView().getAddAutor().setDisable(false);
+					librosController.getView().getpListaEjemplares().setDisable(false);
 					view.getCir().setImage(new Image("resources/green.png"));
 					break;
 				case 2:
 					app.setTitle("Conectado a: ACCESS");
 					librosController.cargarLibros();
 					librosController.getView().getAddAutor().setDisable(true);
+					librosController.getView().getpListaEjemplares().setDisable(true);
 					view.getCir().setImage(new Image("resources/green.png"));
 					break;
 				case 3:
 					app.setTitle("Conectado a: SQL Server");
 					librosController.cargarLibros();
 					librosController.getView().getAddAutor().setDisable(false);
+					librosController.getView().getpListaEjemplares().setDisable(false);
 					view.getCir().setImage(new Image("resources/green.png"));
 					break;
 				case 0:
