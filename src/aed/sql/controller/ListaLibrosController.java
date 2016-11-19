@@ -161,18 +161,31 @@ public class ListaLibrosController {
 			while (result.next()) {
 				autores.add(result.getString(2));
 			}
-			pCECombo.setItems(autores);
+			fNLCombo.setItems(autores);
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 		secondaryStage.setTitle("fnumAutorLibro");
-		secondaryStage.getScene().setRoot(pCEView);
+		secondaryStage.getScene().setRoot(fNLView);
 		secondaryStage.show();
 
 	}
 
 	private void MfNL(ActionEvent e) {
 
+		try {
+			PreparedStatement sql = conexion.getConexion()
+					.prepareStatement("SELECT fnumAutorLibro(?) as fnumAutorLibro");
+			sql.setString(1, fNLCombo.getValue());
+			ResultSet result = sql.executeQuery();
+			while (result.next()) {
+				fNLLabel.setText("Número de libros: " + result.getInt("fnumAutorLibro"));
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
+		pCELabel.setText("Cantidad de libros: ");
 	}
 
 	private void pCantidadEjemplares(ActionEvent e) {
@@ -195,7 +208,6 @@ public class ListaLibrosController {
 	}
 
 	private void MpCE(ActionEvent e) {
-
 		try {
 			CallableStatement pCantidadEjemplares = conexion.getConexion()
 					.prepareCall("CALL pCantidadEjemplares(?,?,?)");
