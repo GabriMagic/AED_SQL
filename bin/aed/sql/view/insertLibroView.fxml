@@ -23,7 +23,6 @@
 			</children>
 		</HBox>
       <DatePicker fx:id="fechaLibro" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-      <Label text="Fecha" GridPane.rowIndex="3" />
 	</children>
 	<rowConstraints>
 		<RowConstraints />

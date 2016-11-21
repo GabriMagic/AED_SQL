@@ -156,6 +156,8 @@ public class ListaLibrosController {
 
 	private void fnumAutorLibro(ActionEvent e) {
 
+		fNLCombo.setValue(null);
+		fNLLabel.setText("");
 		ObservableList<String> autores = FXCollections.observableArrayList();
 		PreparedStatement sql;
 		try {
@@ -233,7 +235,7 @@ public class ListaLibrosController {
 	}
 
 	private void pListaEjemplares(ActionEvent e) {
-
+		pLETable.getItems().clear();
 		ObservableList<Autor> autores = FXCollections.observableArrayList();
 		try {
 			PreparedStatement sql = conexion.getConexion().prepareStatement("SELECT * FROM autores");
@@ -252,7 +254,7 @@ public class ListaLibrosController {
 	}
 
 	private void MpLE(ActionEvent e) {
-		pLETable.getItems().clear();
+		
 		try {
 			ObservableList<Libro> pLELibros = FXCollections.observableArrayList();
 			CallableStatement pListaEjemplares = conexion.getConexion().prepareCall("{CALL pListaEjemplares(?)}");
@@ -421,7 +423,7 @@ public class ListaLibrosController {
 					PreparedStatement query = conexion.getConexion().prepareStatement(sql);
 					query.setString(1, nombreText.getText());
 					query.setString(2, isbnText.getText());
-
+					query.setDate(3, null);
 					if (conexion.isConnected() == 2) {
 						query.setDate(3, java.sql.Date.valueOf(fechaLibro.getValue()));
 					}
