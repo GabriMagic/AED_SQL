@@ -59,6 +59,7 @@ public class MainController {
 					librosController.cargarLibros();
 					librosController.getView().getAddAutor().setDisable(false);
 					librosController.getView().getpListaEjemplares().setDisable(false);
+					librosController.getView().getFnumAutorLibro().setDisable(false);
 					librosController.getView().getpCantidadEjemplares().setDisable(false);
 					view.getCir().setImage(new Image("resources/green.png"));
 					break;
@@ -68,6 +69,7 @@ public class MainController {
 					librosController.getView().getAddAutor().setDisable(true);
 					librosController.getView().getpListaEjemplares().setDisable(true);
 					librosController.getView().getpCantidadEjemplares().setDisable(true);
+					librosController.getView().getFnumAutorLibro().setDisable(true);
 					view.getCir().setImage(new Image("resources/green.png"));
 					break;
 				case 3:
@@ -76,6 +78,7 @@ public class MainController {
 					librosController.getView().getAddAutor().setDisable(false);
 					librosController.getView().getpListaEjemplares().setDisable(false);
 					librosController.getView().getpCantidadEjemplares().setDisable(false);
+					librosController.getView().getFnumAutorLibro().setDisable(false);
 					view.getCir().setImage(new Image("resources/green.png"));
 					break;
 				case 0:

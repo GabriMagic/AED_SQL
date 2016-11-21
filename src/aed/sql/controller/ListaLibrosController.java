@@ -175,8 +175,12 @@ public class ListaLibrosController {
 	private void MfNL(ActionEvent e) {
 
 		try {
-			PreparedStatement sql = conexion.getConexion()
-					.prepareStatement("SELECT fnumAutorLibro(?) as fnumAutorLibro");
+			PreparedStatement sql = null;
+			if (conexion.isConnected() == 1) {
+				sql = conexion.getConexion().prepareStatement("SELECT fnumAutorLibro(?) as fnumAutorLibro");
+			} else if (conexion.isConnected() == 3) {
+				sql = conexion.getConexion().prepareStatement("SELECT dbo.fnumAutorLibro(?) as fnumAutorLibro");
+			}
 			sql.setString(1, fNLCombo.getValue());
 			ResultSet result = sql.executeQuery();
 			while (result.next()) {
@@ -211,7 +215,7 @@ public class ListaLibrosController {
 	private void MpCE(ActionEvent e) {
 		try {
 			CallableStatement pCantidadEjemplares = conexion.getConexion()
-					.prepareCall("CALL pCantidadEjemplares(?,?,?)");
+					.prepareCall("{CALL pCantidadEjemplares(?,?,?)}");
 			pCantidadEjemplares.setString(1, pCECombo.getValue());
 			pCantidadEjemplares.registerOutParameter(2, Types.INTEGER);
 			pCantidadEjemplares.registerOutParameter(3, Types.DATE);
