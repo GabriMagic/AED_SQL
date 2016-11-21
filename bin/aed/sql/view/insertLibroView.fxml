@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -9,33 +10,31 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-
-<GridPane fx:id="insertLibroView" hgap="5.0" vgap="5.0"
-	xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.60">
+<GridPane fx:id="insertLibroView" hgap="5.0" vgap="5.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
 	<children>
 		<Label text="Nombre Libro:" />
 		<TextField fx:id="nombreText" GridPane.columnIndex="1" />
 		<Label text="ISBN:" GridPane.rowIndex="2" />
-		<TextField fx:id="isbnText" GridPane.columnIndex="1"
-			GridPane.rowIndex="2" />
-		<HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0"
-			spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+		<TextField fx:id="isbnText" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+		<HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
 			<children>
-				<Button fx:id="addLibroButton" defaultButton="true"
-					mnemonicParsing="false" onAction="#onAddLibroButton" text="Añadir" />
-				<Button fx:id="cancelButton" mnemonicParsing="false"
-					onAction="#onCancelButton" text="Cancelar" />
+				<Button fx:id="addLibroButton" defaultButton="true" mnemonicParsing="false" onAction="#onAddLibroButton" text="Añadir" />
+				<Button fx:id="cancelButton" mnemonicParsing="false" onAction="#onCancelButton" text="Cancelar" />
 			</children>
 		</HBox>
+      <DatePicker fx:id="fechaLibro" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      <Label text="Fecha" GridPane.rowIndex="3" />
 	</children>
 	<rowConstraints>
 		<RowConstraints />
 		<RowConstraints />
 		<RowConstraints minHeight="10.0" prefHeight="30.0" />
 		<RowConstraints minHeight="10.0" prefHeight="30.0" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" />
 	</rowConstraints>
 	<columnConstraints>
 		<ColumnConstraints minWidth="10.0" prefWidth="100.0" />
+      <ColumnConstraints />
 	</columnConstraints>
 	<padding>
 		<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

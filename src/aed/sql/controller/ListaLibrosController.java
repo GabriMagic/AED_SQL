@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -28,6 +27,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
@@ -50,6 +50,8 @@ public class ListaLibrosController {
 	private TextField isbnText;
 	@FXML
 	private Button addLibroButton;
+	@FXML
+	private DatePicker fechaLibro;
 	@FXML
 	private Button cancelButton;
 	@FXML
@@ -300,7 +302,6 @@ public class ListaLibrosController {
 			PreparedStatement sql = conexion.getConexion().prepareStatement("SELECT * FROM autores");
 			ResultSet result = sql.executeQuery();
 			while (result.next()) {
-
 				autores.add(new Autor(result.getString("codAutor"), result.getString("nombreAutor")));
 			}
 			autoresCombo.setItems(autores);
@@ -420,12 +421,9 @@ public class ListaLibrosController {
 					PreparedStatement query = conexion.getConexion().prepareStatement(sql);
 					query.setString(1, nombreText.getText());
 					query.setString(2, isbnText.getText());
-					query.setDate(3, null);
 
 					if (conexion.isConnected() == 2) {
-						Date aux = Calendar.getInstance().getTime();
-						java.sql.Date sqlDate = new java.sql.Date(aux.getTime());
-						query.setDate(3, sqlDate);
+						query.setDate(3, java.sql.Date.valueOf(fechaLibro.getValue()));
 					}
 					query.execute();
 
@@ -542,5 +540,9 @@ public class ListaLibrosController {
 
 	public ListaLibros getListaLibros() {
 		return listaLibros;
+	}
+
+	public DatePicker getFechaLibro() {
+		return fechaLibro;
 	}
 }

@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 public class MainController {
 
 	private Conexion conexion;
-	private ListaLibrosController librosController;
+	private ListaLibrosController controller;
 	private MainView view;
 	private Stage app;
 
@@ -22,7 +22,7 @@ public class MainController {
 		view = new MainView();
 
 		app = primaryStage;
-		librosController = new ListaLibrosController();
+		controller = new ListaLibrosController();
 		conexion = new Conexion();
 
 		view.getConDisconButton().setOnAction(e -> inicializarConexion(e));
@@ -46,39 +46,42 @@ public class MainController {
 
 			conexion.conectar();
 
-			librosController = new ListaLibrosController();
-			librosController.setConexion(conexion);
+			controller = new ListaLibrosController();
+			controller.setConexion(conexion);
 
-			view.setCenter(librosController.getView());
+			view.setCenter(controller.getView());
 
 			try {
 
 				switch (conexion.isConnected()) {
 				case 1:
 					app.setTitle("Conectado a: MySQL");
-					librosController.cargarLibros();
-					librosController.getView().getAddAutor().setDisable(false);
-					librosController.getView().getpListaEjemplares().setDisable(false);
-					librosController.getView().getFnumAutorLibro().setDisable(false);
-					librosController.getView().getpCantidadEjemplares().setDisable(false);
+					controller.cargarLibros();
+					controller.getView().getAddAutor().setDisable(false);
+					controller.getView().getpListaEjemplares().setDisable(false);
+					controller.getView().getFnumAutorLibro().setDisable(false);
+					controller.getView().getpCantidadEjemplares().setDisable(false);
+					controller.getFechaLibro().setDisable(true);
 					view.getCir().setImage(new Image("resources/green.png"));
 					break;
 				case 2:
 					app.setTitle("Conectado a: ACCESS");
-					librosController.cargarLibros();
-					librosController.getView().getAddAutor().setDisable(true);
-					librosController.getView().getpListaEjemplares().setDisable(true);
-					librosController.getView().getpCantidadEjemplares().setDisable(true);
-					librosController.getView().getFnumAutorLibro().setDisable(true);
+					controller.cargarLibros();
+					controller.getView().getAddAutor().setDisable(true);
+					controller.getView().getpListaEjemplares().setDisable(true);
+					controller.getView().getpCantidadEjemplares().setDisable(true);
+					controller.getView().getFnumAutorLibro().setDisable(true);
+					controller.getFechaLibro().setDisable(false);
 					view.getCir().setImage(new Image("resources/green.png"));
 					break;
 				case 3:
 					app.setTitle("Conectado a: SQL Server");
-					librosController.cargarLibros();
-					librosController.getView().getAddAutor().setDisable(false);
-					librosController.getView().getpListaEjemplares().setDisable(false);
-					librosController.getView().getpCantidadEjemplares().setDisable(false);
-					librosController.getView().getFnumAutorLibro().setDisable(false);
+					controller.cargarLibros();
+					controller.getView().getAddAutor().setDisable(false);
+					controller.getView().getpListaEjemplares().setDisable(false);
+					controller.getView().getpCantidadEjemplares().setDisable(false);
+					controller.getView().getFnumAutorLibro().setDisable(false);
+					controller.getFechaLibro().setDisable(true);
 					view.getCir().setImage(new Image("resources/green.png"));
 					break;
 				case 0:
@@ -87,7 +90,7 @@ public class MainController {
 					errorConnect
 							.setContentText("Error al conectar con la base de datos: " + view.getDbText().getText());
 					errorConnect.show();
-					librosController.getListaLibros().getLibros().clear();
+					controller.getListaLibros().getLibros().clear();
 					app.setTitle("-------");
 					view.getCir().setImage(new Image("resources/red.png"));
 					break;

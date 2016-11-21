@@ -52,7 +52,7 @@ public class MainView extends BorderPane {
 		rutaBox.setItems(FXCollections.observableArrayList(optionList));
 		rutaBox.getSelectionModel().select(0);
 
-		hostText = new TextField("ALUMNO-2DAM\\SQLEXPRESS");
+		hostText = new TextField("");
 		hostText.setPromptText("Host...");
 
 		puertoText = new TextField("3306");
