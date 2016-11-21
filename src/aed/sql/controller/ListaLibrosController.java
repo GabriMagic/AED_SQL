@@ -249,7 +249,7 @@ public class ListaLibrosController {
 		pLETable.getItems().clear();
 		try {
 			ObservableList<Libro> pLELibros = FXCollections.observableArrayList();
-			CallableStatement pListaEjemplares = conexion.getConexion().prepareCall("CALL pListaEjemplares(?)");
+			CallableStatement pListaEjemplares = conexion.getConexion().prepareCall("{CALL pListaEjemplares(?)}");
 			pListaEjemplares.setString(1, pLECombo.getValue().getNombreAutor());
 			ResultSet resultado = pListaEjemplares.executeQuery();
 			while (resultado.next()) {
@@ -270,7 +270,7 @@ public class ListaLibrosController {
 	private void onConfirmAddAutor(ActionEvent e) {
 		try {
 			if (autoresCombo.getValue() != null) {
-				CallableStatement pLibrosAutores = conexion.getConexion().prepareCall("CALL pLibrosAutores(?,?,?)");
+				CallableStatement pLibrosAutores = conexion.getConexion().prepareCall("{CALL pLibrosAutores(?,?,?)}");
 				pLibrosAutores.setString(1, view.getLibrosTable().getSelectionModel().getSelectedItem().getIsbn());
 				pLibrosAutores.setString(2, autoresCombo.getValue().getCodAutor());
 				pLibrosAutores.registerOutParameter(3, Types.INTEGER);
