@@ -49,7 +49,7 @@ public class MainController {
 			librosController = new ListaLibrosController();
 			librosController.setConexion(conexion);
 
-			view.getLibrosTab().setContent(librosController.getView());
+			view.setCenter(librosController.getView());
 
 			try {
 
@@ -110,7 +110,7 @@ public class MainController {
 				conexion.getConexion().close();
 				view.getCir().setImage(new Image("resources/red.png"));
 				view.getActualizarButton().setDisable(true);
-				view.getLibrosTab().setContent(null);
+				view.setCenter(null);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

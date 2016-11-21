@@ -6,8 +6,6 @@ import javafx.collections.FXCollections;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
@@ -17,7 +15,6 @@ import javafx.scene.shape.Circle;
 
 public class MainView extends BorderPane {
 
-	private Tab librosTab, insertTab;
 	private ToolBar toolBar;
 
 	private Button actualizarButton;
@@ -45,7 +42,7 @@ public class MainView extends BorderPane {
 		conDisconButton = new ToggleButton("", cir);
 		conDisconButton.setFocusTraversable(false);
 		conDisconButton.setShape(new Circle(1.5));
-		conDisconButton.setMaxSize(0,0);
+		conDisconButton.setMaxSize(0, 0);
 
 		actualizarButton = new Button("Actualizar");
 		actualizarButton.setDefaultButton(true);
@@ -73,17 +70,7 @@ public class MainView extends BorderPane {
 		toolBar.getItems().addAll(rutaBox, hostText, puertoText, dbText, userText, passwordField, actualizarButton,
 				conDisconButton);
 
-		librosTab = new Tab("Libros");
-		librosTab.setClosable(false);
-		insertTab = new Tab("xXx");
-		insertTab.setClosable(false);
-
-		TabPane tabPane = new TabPane();
-
-		tabPane.getTabs().addAll(librosTab, insertTab);
-
 		setTop(toolBar);
-		setCenter(tabPane);
 	}
 
 	public ToolBar getToolBar() {
@@ -124,14 +111,6 @@ public class MainView extends BorderPane {
 
 	public ArrayList<String> getOptionList() {
 		return optionList;
-	}
-
-	public Tab getLibrosTab() {
-		return librosTab;
-	}
-
-	public Tab getInsertTab() {
-		return insertTab;
 	}
 
 	public ToggleButton getConDisconButton() {

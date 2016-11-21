@@ -1,4 +1,4 @@
-package aed.sql.controller;
+package aed.sql.model;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;

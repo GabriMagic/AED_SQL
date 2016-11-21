@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import aed.sql.model.Autor;
 import aed.sql.model.Conexion;
 import aed.sql.model.Libro;
 import aed.sql.model.ListaLibros;
