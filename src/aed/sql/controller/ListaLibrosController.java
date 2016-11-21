@@ -416,10 +416,9 @@ public class ListaLibrosController {
 					PreparedStatement query = conexion.getConexion().prepareStatement(sql);
 					query.setString(1, nombreText.getText());
 					query.setString(2, isbnText.getText());
+					query.setDate(3, null);
 
-					if (conexion.isConnected() == 1) {
-						query.setDate(3, null);
-					} else if (conexion.isConnected() == 2) {
+					if (conexion.isConnected() == 2) {
 						Date aux = Calendar.getInstance().getTime();
 						java.sql.Date sqlDate = new java.sql.Date(aux.getTime());
 						query.setDate(3, sqlDate);
@@ -435,6 +434,7 @@ public class ListaLibrosController {
 					alertMessage.show();
 				}
 			} catch (NullPointerException | SQLException e2) {
+				e2.printStackTrace();
 				System.err.println(e2.getLocalizedMessage());
 				alertMessage.setAlertType(AlertType.ERROR);
 				alertMessage.setTitle("Error de conexión");
