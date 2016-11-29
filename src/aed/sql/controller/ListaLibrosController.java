@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -254,7 +255,7 @@ public class ListaLibrosController {
 	}
 
 	private void MpLE(ActionEvent e) {
-		
+
 		try {
 			ObservableList<Libro> pLELibros = FXCollections.observableArrayList();
 			CallableStatement pListaEjemplares = conexion.getConexion().prepareCall("{CALL pListaEjemplares(?)}");
@@ -425,7 +426,7 @@ public class ListaLibrosController {
 					query.setString(2, isbnText.getText());
 					query.setDate(3, null);
 					if (conexion.isConnected() == 2) {
-						query.setDate(3, java.sql.Date.valueOf(fechaLibro.getValue()));
+						query.setDate(3, java.sql.Date.valueOf(LocalDate.now()));
 					}
 					query.execute();
 
