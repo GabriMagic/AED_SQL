@@ -500,7 +500,7 @@ public class ListaLibrosController {
 	}
 
 	private void FXMLloaders() {
-		FXMLLoader loaderLibros = new FXMLLoader(getClass().getResource("/aed/sql/view/InsertLibroView.fxml"));
+		FXMLLoader loaderLibros = new FXMLLoader(getClass().getResource("/aed/sql/view/insertLibroView.fxml"));
 		loaderLibros.setController(this);
 		try {
 			insertLibroView = loaderLibros.load();
