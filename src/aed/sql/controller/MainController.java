@@ -48,40 +48,30 @@ public class MainController {
 
 			controller = new ListaLibrosController();
 			controller.setConexion(conexion);
+			
+			controller.getView().getFnumAutorLibro().disableProperty().bind(conexion.connectedProperty().isEqualTo(2));
+			controller.getView().getpCantidadEjemplares().disableProperty().bind(conexion.connectedProperty().isEqualTo(2));
+			controller.getView().getpListaEjemplares().disableProperty().bind(conexion.connectedProperty().isEqualTo(2));
+			controller.getView().getAddAutor().disableProperty().bind(conexion.connectedProperty().isEqualTo(2));
 
 			view.setCenter(controller.getView());
 
 			try {
 
-				switch (conexion.isConnected()) {
+				switch (conexion.getConnected()) {
 				case 1:
 					app.setTitle("Conectado a: MySQL");
 					controller.cargarLibros();
-					controller.getView().getAddAutor().setDisable(false);
-					controller.getView().getpListaEjemplares().setDisable(false);
-					controller.getView().getFnumAutorLibro().setDisable(false);
-					controller.getView().getpCantidadEjemplares().setDisable(false);
-					controller.getFechaLibro().setDisable(true);
 					view.getCir().setImage(new Image("resources/green.png"));
 					break;
 				case 2:
 					app.setTitle("Conectado a: ACCESS");
 					controller.cargarLibros();
-					controller.getView().getAddAutor().setDisable(true);
-					controller.getView().getpListaEjemplares().setDisable(true);
-					controller.getView().getpCantidadEjemplares().setDisable(true);
-					controller.getView().getFnumAutorLibro().setDisable(true);
-					controller.getFechaLibro().setDisable(false);
 					view.getCir().setImage(new Image("resources/green.png"));
 					break;
 				case 3:
 					app.setTitle("Conectado a: SQL Server");
 					controller.cargarLibros();
-					controller.getView().getAddAutor().setDisable(false);
-					controller.getView().getpListaEjemplares().setDisable(false);
-					controller.getView().getpCantidadEjemplares().setDisable(false);
-					controller.getView().getFnumAutorLibro().setDisable(false);
-					controller.getFechaLibro().setDisable(true);
 					view.getCir().setImage(new Image("resources/green.png"));
 					break;
 				case 0:

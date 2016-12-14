@@ -4,13 +4,16 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+
 public class Conexion {
 
 	private Connection conexion;
 
 	private String ruta, host, db, user, password, link;
 	private int puerto;
-	private int connected;
+	private IntegerProperty connected;
 
 	public Conexion() {
 
@@ -18,24 +21,26 @@ public class Conexion {
 
 	public int conectar() {
 
+		connected = new SimpleIntegerProperty(this, "connected", 0);
+
 		switch (ruta) {
 		case "jdbc:mysql:":
 			try {
 				link = ruta + "//" + host + ":" + puerto + "/" + db;
 				this.conexion = DriverManager.getConnection(link, user, password);
-				connected = 1;
+				connected.set(1);
 			} catch (SQLException e) {
-				connected = 0;
+				connected.set(0);
 			}
 			break;
 		case "jdbc:ucanaccess:":
 			try {
 				Class.forName("org.hsqldb.jdbcDriver");
 				this.conexion = DriverManager.getConnection(ruta + "//" + host);
-				connected = 2;
+				connected.set(2);
 			} catch (SQLException | ClassNotFoundException e) {
 				e.printStackTrace();
-				connected = 0;
+				connected.set(0);
 			}
 			break;
 		case "jdbc:sqlserver:":
@@ -43,15 +48,15 @@ public class Conexion {
 				Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 				link = ruta + "//" + host + ";" + "DataBaseName=" + db;
 				this.conexion = DriverManager.getConnection(link, user, password);
-				connected = 3;
+				connected.set(3);
 			} catch (SQLException | ClassNotFoundException e) {
 				e.printStackTrace();
-				connected = 0;
+				connected.set(0);
 			}
 			break;
 
 		}
-		return connected;
+		return connected.get();
 	}
 
 	public Connection getConexion() {
@@ -106,10 +111,6 @@ public class Conexion {
 		this.link = link;
 	}
 
-	public int isConnected() {
-		return connected;
-	}
-
 	public int getPuerto() {
 		return puerto;
 	}
@@ -120,6 +121,18 @@ public class Conexion {
 
 	public void setConexion(Connection conexion) {
 		this.conexion = conexion;
+	}
+
+	public IntegerProperty connectedProperty() {
+		return this.connected;
+	}
+
+	public int getConnected() {
+		return this.connectedProperty().get();
+	}
+
+	public void setConnected(final int connected) {
+		this.connectedProperty().set(connected);
 	}
 
 }

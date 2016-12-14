@@ -28,7 +28,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
@@ -51,8 +50,6 @@ public class ListaLibrosController {
 	private TextField isbnText;
 	@FXML
 	private Button addLibroButton;
-	@FXML
-	private DatePicker fechaLibro;
 	@FXML
 	private Button cancelButton;
 	@FXML
@@ -181,9 +178,9 @@ public class ListaLibrosController {
 
 		try {
 			PreparedStatement sql = null;
-			if (conexion.isConnected() == 1) {
+			if (conexion.getConnected() == 1) {
 				sql = conexion.getConexion().prepareStatement("SELECT fnumAutorLibro(?) as fnumAutorLibro");
-			} else if (conexion.isConnected() == 3) {
+			} else if (conexion.getConnected() == 3) {
 				sql = conexion.getConexion().prepareStatement("SELECT dbo.fnumAutorLibro(?) as fnumAutorLibro");
 			}
 			sql.setString(1, fNLCombo.getValue());
@@ -354,7 +351,7 @@ public class ListaLibrosController {
 	}
 
 	private void onAddButtonAction(ActionEvent e) {
-		if (conexion.isConnected() > 0) {
+		if (conexion.getConnected() > 0) {
 			secondaryStage.getScene().setRoot(insertLibroView);
 			secondaryStage.show();
 		} else {
@@ -368,7 +365,7 @@ public class ListaLibrosController {
 
 	private void onEliminarButtonAction(ActionEvent e) {
 		int aux = view.getLibrosTable().getSelectionModel().getSelectedItem().getCodLibro();
-		if (conexion.isConnected() > 0) {
+		if (conexion.getConnected() > 0) {
 			try {
 				alertMessage.setAlertType(AlertType.CONFIRMATION);
 				alertMessage.setTitle("Atención!");
@@ -416,7 +413,7 @@ public class ListaLibrosController {
 
 	@FXML
 	void onAddLibroButton(ActionEvent event) {
-		if (conexion.isConnected() > 0)
+		if (conexion.getConnected() > 0)
 			try {
 				Matcher mat = pattern.matcher(isbnText.getText());
 				if (mat.matches()) {
@@ -425,7 +422,7 @@ public class ListaLibrosController {
 					query.setString(1, nombreText.getText());
 					query.setString(2, isbnText.getText());
 					query.setDate(3, null);
-					if (conexion.isConnected() == 2) {
+					if (conexion.getConnected() == 2 || conexion.getConnected() == 3) {
 						query.setDate(3, java.sql.Date.valueOf(LocalDate.now()));
 					}
 					query.execute();
@@ -463,7 +460,7 @@ public class ListaLibrosController {
 		listaLibros.librosProperty().clear();
 		view.getLibrosTable().setItems(listaLibros.librosProperty());
 
-		if (conexion.isConnected() > 0) {
+		if (conexion.getConnected() > 0) {
 			try {
 
 				String query = "SELECT lb.codLibro, nombreLibro, ISBN, fechaIntro, codEjemplar, importe, nombreAutor, au.codAutor FROM libros as lb "
@@ -477,14 +474,13 @@ public class ListaLibrosController {
 
 				while (resultado.next()) {
 
-					if (conexion.isConnected() == 1) {
+					if (conexion.getConnected() == 1) {
 						listaLibros.getLibros()
 								.add(new Libro(resultado.getInt("codLibro"), resultado.getString("nombreLibro"),
 										resultado.getString("isbn"), resultado.getDate("fechaIntro"),
 										resultado.getInt("codEjemplar"), resultado.getDouble("importe"),
 										resultado.getString("nombreAutor"), resultado.getString("codAutor")));
 					} else {
-
 						listaLibros.getLibros()
 								.add(new Libro(resultado.getInt("codLibro"), resultado.getString("nombreLibro"),
 										resultado.getString("isbn"), resultado.getDate("fechaIntro"),
@@ -501,35 +497,28 @@ public class ListaLibrosController {
 	}
 
 	private void FXMLloaders() {
-		FXMLLoader loaderLibros = new FXMLLoader(getClass().getResource("/aed/sql/view/insertLibroView.fxml"));
-		loaderLibros.setController(this);
 		try {
+			FXMLLoader loaderLibros = new FXMLLoader(getClass().getResource("/aed/sql/view/insertLibroView.fxml"));
+			loaderLibros.setController(this);
 			insertLibroView = loaderLibros.load();
-		} catch (IOException e1) {
-		}
-		FXMLLoader loaderAutores = new FXMLLoader(getClass().getResource("/aed/sql/view/AddAutorView.fxml"));
-		loaderAutores.setController(this);
-		try {
+
+			FXMLLoader loaderAutores = new FXMLLoader(getClass().getResource("/aed/sql/view/AddAutorView.fxml"));
+			loaderAutores.setController(this);
 			addAutorView = loaderAutores.load();
-		} catch (IOException e1) {
-		}
-		FXMLLoader pLE = new FXMLLoader(getClass().getResource("/aed/sql/view/PLEView.fxml"));
-		pLE.setController(this);
-		try {
+
+			FXMLLoader pLE = new FXMLLoader(getClass().getResource("/aed/sql/view/PLEView.fxml"));
+			pLE.setController(this);
 			pLEView = pLE.load();
-		} catch (IOException e1) {
-		}
-		FXMLLoader pCE = new FXMLLoader(getClass().getResource("/aed/sql/view/PCEView.fxml"));
-		pCE.setController(this);
-		try {
+
+			FXMLLoader pCE = new FXMLLoader(getClass().getResource("/aed/sql/view/PCEView.fxml"));
+			pCE.setController(this);
 			pCEView = pCE.load();
-		} catch (IOException e1) {
-		}
-		FXMLLoader fNL = new FXMLLoader(getClass().getResource("/aed/sql/view/FnumAutorLibro.fxml"));
-		fNL.setController(this);
-		try {
+
+			FXMLLoader fNL = new FXMLLoader(getClass().getResource("/aed/sql/view/FnumAutorLibro.fxml"));
+			fNL.setController(this);
 			fNLView = fNL.load();
 		} catch (IOException e1) {
+
 		}
 	}
 
@@ -545,7 +534,4 @@ public class ListaLibrosController {
 		return listaLibros;
 	}
 
-	public DatePicker getFechaLibro() {
-		return fechaLibro;
-	}
 }
